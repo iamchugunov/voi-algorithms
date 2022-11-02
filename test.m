@@ -34,7 +34,7 @@ get_rd_from_poits(poits);
 for i = 1:length(poits)
     poits(i) = crd_calc(poits(i),config);
 end
-% figure
+figure
 show_posts3D
 show_primary_points3D(poits)
 
