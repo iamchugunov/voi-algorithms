@@ -18,7 +18,7 @@ function [config] = Config()
     BLHref = [30.097498; 30.962812; 0]; % Cairo
 
 %% погрешность измерений
-    config.sigma_n_ns = 10;
+    config.sigma_n_ns = 30;
     
 end
 
