@@ -6,8 +6,12 @@ function [track] = make_geo_track_circle(traj_params, config)
     h = traj_params.h;
     time_interval = traj_params.time_interval;
     track_id = traj_params.track_id;
-    alfa= traj_params.alfa;
     t = time_interval(1):1:time_interval(end);
+    
+    % параметры манёвра
+    alfa = 45 * pi/180; % угол поворота в манёвре
+    T1 = 200 + time_interval(1); % время начала манёвра
+    T2 = time_interval(end) - 200; %время окончания манёвра
     
     
   
@@ -16,16 +20,28 @@ function [track] = make_geo_track_circle(traj_params, config)
     dop = get_dop_value(config, X(1,1), X(2,1), X(3,1),'ToA');
     h_geo(1,1) = h;
     for i = 2:length(t)
-        if (i<100)
-        a=kurs+(i*pi/180);
-        else
-            a=kurs;
+        % одна из форм траекторий
+     %   if (i<length(t)/2)
+     %   a=kurs+(i*pi/180);
+     %   elseif (i>length(t)/2)
+     %       a=kurs - (i*pi/180);
+     %    else 
+     %        a = kurs;
+     %    end
+     % изменение траектории на отдельных участках 
+        if (i < T1)
+            a = kurs;
+        elseif (i < T2)
+            a= kurs + alfa;
+        else 
+            a = kurs;
         end
-         Vy = V * sin(a);
-         Vx = V * cos(a);
+       
+        Vy = V * sin(a);
+        Vx = V * cos(a);
         X(1,i) = X(1,i-1) + Vx * (t(i) - t(i-1));
         X(2,i) = X(2,i-1) + Vy * (t(i) - t(i-1));
-          X(3,i) = h_geo_calc(X(1,i),X(2,i),h);
+        X(3,i) = h_geo_calc(X(1,i),X(2,i),h)+ (-1) + i * 100; %изменение высоты
         dop(i) = get_dop_value(config, X(1,i), X(2,i), X(3,i),'ToA');
         h_geo(:,i) = h;
     end
