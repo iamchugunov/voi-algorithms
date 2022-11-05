@@ -16,11 +16,7 @@ function [track] = make_geo_track_circle(traj_params, config)
     dop = get_dop_value(config, X(1,1), X(2,1), X(3,1),'ToA');
     h_geo(1,1) = h;
     for i = 2:length(t)
-        if (i<100)
-        a=kurs+(i*pi/180);
-        else
-            a=kurs;
-        end
+          a=kurs+(i*pi/180);
          Vy = V * sin(a);
          Vx = V * cos(a);
         X(1,i) = X(1,i-1) + Vx * (t(i) - t(i-1));
