@@ -1,11 +1,10 @@
 %% Моделируем траектории и расчет первичных точек
 clear all
 config = Config(); % конфиг содержит координаты постов
-
 N = 10;
 show_posts3D
 for i = 1:N
-    traj_params.X0 = [randi([-100 100]);randi([-100 100])]*1e3; % начальные координаты, м
+    traj_params.X0 = [randi([-150 150]);randi([-50 50])]*1e3; % начальные координаты, м
     traj_params.V = 200 + randi([-50 50]); % скорость, м/c
     traj_params.kurs = randi([0 35])*10; % направление, град
     traj_params.h = 10e3 + 500 * randi([-4 4]); % высота над уровнем моря, м
@@ -17,7 +16,7 @@ for i = 1:N
 end
 
 % формирование измерений
-measurements_params.sigma_n_ns = 30;
+measurements_params.sigma_n_ns = 10;
 measurements_params.period_sec = 0.1;
 measurements_params.n_periods = 10;
 measurements_params.strob_dur = 0.12;
@@ -42,7 +41,7 @@ clear all
 config = Config(); % конфиг содержит координаты постов
 
 % traj_params.X0 = [randi([-100 100]);randi([-100 100])]*1e3; % начальные координаты, м
-traj_params.X0 = [20; 20]*1e3; % начальные координаты, м
+traj_params.X0 = [0; 0]*1e3; % начальные координаты, м
 traj_params.V = 0; % скорость, м/c
 traj_params.kurs = 120; % направление, град
 traj_params.h = 10e3; % высота над уровнем моря, м

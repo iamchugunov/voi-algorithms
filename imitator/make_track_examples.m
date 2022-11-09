@@ -20,7 +20,7 @@
   show_track_dop(track)
   % формирование измерений
   
-  measurements_params.sigma_n_ns = 10;
+  measurements_params.sigma_n_ns = config.sigma_n_ns;
   measurements_params.period_sec = 0.1;
   measurements_params.n_periods = 0;
   measurements_params.strob_dur = 0.12;

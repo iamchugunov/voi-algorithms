@@ -12,6 +12,7 @@ function [config] = Config()
         posts(:,i) = [R * cos(alphap(i)); R * sin(alphap(i)); hp];
     end
     posts(:,4) = [0;0;hp];
+%     posts = [-5e3 -5e3 5e3 5e3; -5e3 5e3 -5e3 5e3; 100 100 100 100];
     config.posts = posts;
     
 %% центральная точка
