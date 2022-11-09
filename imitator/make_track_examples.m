@@ -7,7 +7,7 @@
   traj_params.h = 10e3; % высота над уровнем моря, м
   traj_params.time_interval = [0 600]; % временной отрезок, сек
   traj_params.track_id = 0;
-  track = make_geo_track(traj_params, config);
+  track = make_geo_track_circle(traj_params, config);
   % построим графики
   %2D
   figure

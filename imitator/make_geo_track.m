@@ -16,6 +16,7 @@ function [track] = make_geo_track(traj_params, config)
     dop = get_dop_value(config, X(1,1), X(2,1), X(3,1),'ToA');
     h_geo(1,1) = h;
     for i = 2:length(t)
+        
         X(1,i) = X(1,i-1) + Vx * (t(i) - t(i-1));
         X(2,i) = X(2,i-1) + Vy * (t(i) - t(i-1));
         X(3,i) = h_geo_calc(X(1,i),X(2,i),h);
