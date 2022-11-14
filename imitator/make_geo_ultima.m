@@ -18,13 +18,13 @@ function [track] = make_geo_ultima(traj_params, config)
     dop = get_dop_value(config, X(1,1), X(2,1), X(3,1),'ToA');
     h_geo(1,1) = h;
     % начало суперфункции
-    time_priquel = 2;
+    time_priquel = 2; % время предшествующего начала/конца предыдущего манёвра
     for j = 1:(count_mnv)
-         index_type_mnv = randi(2,1);
-         type_track = type_mnv(index_type_mnv);
-          turn_direction = randi(2,1);
+         index_type_mnv = randi(2,1); % случайное определение команды для манёвра
+         type_track = type_mnv(index_type_mnv); % тип манёвра 
+         turn_direction = randi(2,1); % случайное определение поворота(лево/право)
          for i = time_priquel:(length(t)/count_mnv)*j
-            %{
+            %{ попытка реализации типа манёвра ч
             if  strcmp("line",type_track) == true
                 omega = 0;
             elseif strcmp("circle",type_track) == true

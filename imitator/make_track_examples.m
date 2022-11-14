@@ -7,9 +7,9 @@
   traj_params.h = 10e3; % высота над уровнем моря, м
   traj_params.time_interval = [0 600]; % временной отрезок, сек
   traj_params.track_id = 0;
-  traj_params.count_mnv = 5;
-  traj_params.type_mnv = [1 2];
-  traj_params.omega = 0.6; % скорость изменения угла, градус в секунду
+  traj_params.count_mnv = 5; % количество манёвров
+  traj_params.type_mnv = [1 2]; % массив команд для манёвра 1 - прямая 2 - поворот, вполоть до окружности
+  traj_params.omega = 0.3; % скорость изменения угла, градус в секунду
   track = make_geo_ultima(traj_params, config);
   
   % построим графики
