@@ -1,4 +1,4 @@
-function [track] = make_geo_track_circle(traj_params, config)
+function [track] = make_geo_ultima(traj_params, config)
 
     X0 = traj_params.X0;
     V = traj_params.V;
@@ -6,16 +6,42 @@ function [track] = make_geo_track_circle(traj_params, config)
     h = traj_params.h;
     time_interval = traj_params.time_interval;
     track_id = traj_params.track_id;
-    omega = traj_params.omega * pi/180; 
-    t = time_interval(1):1:time_interval(end);
+
+    omega = traj_params.omega * pi/180;
+    count_mnv = traj_params.count_mnv;
+    type_mnv = traj_params.type_mnv;
     
-   
+
+    t = time_interval(1):1:time_interval(end);
+
     X = [X0;h_geo_calc(X0(1),X0(2),h)];
     dop = get_dop_value(config, X(1,1), X(2,1), X(3,1),'ToA');
     h_geo(1,1) = h;
-    for i = 2:length(t)
+    % начало суперфункции
+    time_priquel = 2;
+    for j = 1:(count_mnv)
+         index_type_mnv = randi(2,1);
+         type_track = type_mnv(index_type_mnv);
+          turn_direction = randi(2,1);
+         for i = time_priquel:(length(t)/count_mnv)*j
+            %{
+            if  strcmp("line",type_track) == true
+                omega = 0;
+            elseif strcmp("circle",type_track) == true
+                omega = traj_params.omega * pi/180;
 
-         kurs = kurs + omega * (t(i)-t(i-1));
+            end
+            %}
+            if type_track == 1
+                omega = 0;
+            elseif type_track == 2
+                omega = traj_params.omega * pi/180;
+                
+            end
+         
+         
+
+         kurs = kurs +  omega* (-1)^turn_direction * (t(i)-t(i-1));
          Vy = V * sin(kurs);
          Vx = V * cos(kurs);
 
@@ -24,9 +50,14 @@ function [track] = make_geo_track_circle(traj_params, config)
         X(3,i) = h_geo_calc(X(1,i),X(2,i),h); %изменение высоты ( + i * 100)
         dop(i) = get_dop_value(config, X(1,i), X(2,i), X(3,i),'ToA');
         h_geo(:,i) = h;
+        end 
+        time_priquel = i;
     end
+
+    % конец суперфункции
+
     
-    track.id = track_id;
+ track.id = track_id;
     track.t = t;
     track.crd = X;
     coords = X;
@@ -40,6 +71,7 @@ function [track] = make_geo_track_circle(traj_params, config)
     track.h_geo = h_geo;
     track.dop = dop;
     track.poits = [];
+    
 end
 
 
