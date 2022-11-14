@@ -40,7 +40,7 @@ for i = 1:N
     traj_params.h = 10e3 + 500 * randi([-4 4]); % высота над уровнем моря, м
     traj_params.time_interval = [0 600]; % временной отрезок, сек
     traj_params.track_id = i;
-    track = make_geo_track(traj_params, config);
+    track = make_geo_track_circle(traj_params, config);
     show_track3D(track);
     tracks(i) = track;
 end

@@ -14,10 +14,16 @@ function [track] = make_geo_track_circle(traj_params, config)
     h_geo(1,1) = h;
     for i = 2:length(t)
 
+<<<<<<< Updated upstream
          a=kurs+(i*pi/180);
          % kurs = kurs + traj_params.omega * (t(i) - t(i-1));
          Vy = V * sin(a);
          Vx = V * cos(a);
+=======
+        a=kurs+(i*pi/180);
+        Vy = V * sin(a);
+        Vx = V * cos(a);
+>>>>>>> Stashed changes
               
         X(1,i) = X(1,i-1) + Vx * (t(i) - t(i-1));
         X(2,i) = X(2,i-1) + Vy * (t(i) - t(i-1));
@@ -26,25 +32,9 @@ function [track] = make_geo_track_circle(traj_params, config)
         h_geo(:,i) = h;
     end
     
-    track.id = track_id;
-    track.t = t;
-    track.crd = X;
-    coords = X;
-    V = [diff(coords(1,:))./diff(t); diff(coords(2,:))./diff(t); diff(coords(3,:))./diff(t);];
-    V(:,end + 1) = V(:,end);
-    a = [diff(V(1,:))./diff(t); diff(V(2,:))./diff(t); diff(V(3,:))./diff(t);];
-    a(:,end) = a(:,end-1);
-    a(:,end + 1) = a(:,end-1);
-    track.vel = V;
-    track.acc = a;
-    track.h_geo = h_geo;
-    track.dop = dop;
-    track.poits = [];
+   track= track_something(X,t,track_id,h_geo,dop);
     
 end
 
-function z = h_geo_calc(x,y,h)
-    Rz = 6371e3;
-    z = -Rz + sqrt((Rz + h)^2 - (x^2+y^2));
-end
+
 

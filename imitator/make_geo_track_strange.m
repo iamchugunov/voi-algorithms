@@ -19,15 +19,9 @@ function [track] = make_geo_track_strange(traj_params, config)
     h_geo(1,1) = h;
     for i = 2:length(t)
 
-          a=kurs+(i*pi/180);
-         Vy = V * sin(a);
-         Vx = V * cos(a);
-
-        %{ 
-        a = kurs + (i * pi/180); % круговая траектория
-        %}
+        
      % Манёвр на участке от T1 до T2 c углом смены курса alfa 
-        %{%
+       
         if (i < T1)
             a = kurs;
         elseif (i < T2)
@@ -35,7 +29,7 @@ function [track] = make_geo_track_strange(traj_params, config)
         else 
             a = kurs;
         end
-        %} %
+         
      % странная траектория (змейка)
      %{
        if (i < T1/4 )
@@ -75,24 +69,8 @@ function [track] = make_geo_track_strange(traj_params, config)
         h_geo(:,i) = h;
     end
     
-    track.id = track_id;
-    track.t = t;
-    track.crd = X;
-    coords = X;
-    V = [diff(coords(1,:))./diff(t); diff(coords(2,:))./diff(t); diff(coords(3,:))./diff(t);];
-    V(:,end + 1) = V(:,end);
-    a = [diff(V(1,:))./diff(t); diff(V(2,:))./diff(t); diff(V(3,:))./diff(t);];
-    a(:,end) = a(:,end-1);
-    a(:,end + 1) = a(:,end-1);
-    track.vel = V;
-    track.acc = a;
-    track.h_geo = h_geo;
-    track.dop = dop;
-    track.poits = [];
+  track=track_something(X,t,track_id,h_geo,dop);
     
 end
 
-function z = h_geo_calc(x,y,h)
-    Rz = 6371e3;
-    z = -Rz + sqrt((Rz + h)^2 - (x^2+y^2));
-end
+
