@@ -37,7 +37,7 @@ function [track] = make_geo_ultima(traj_params, config)
          for i = time_priquel:(length(t)/count_mnv)*j
 
             % Ускорение
-            
+            % возможное рещение проблемы and V > 100 and V < 1
             if type_acc == 1
                 acc_moov = 0;
             elseif type_acc == 2
@@ -75,10 +75,10 @@ function [track] = make_geo_ultima(traj_params, config)
     % конец суперфункции
     
    figure
-   plot(1:3601,track1.vxyi);
+   plot(1:601,track1.vxyi);
    hold on;
    grid on;
-   plot(1:3601,track1.vhyi);
+   plot(1:601,track1.vhyi);
    hold off;
     
     
