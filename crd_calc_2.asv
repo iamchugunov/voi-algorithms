@@ -1,0 +1,123 @@
+function [res] = crd_calc_2(tracks, config)
+res = [];
+res.a = [];%массив коэффицинтов а
+res.b = [];%массив коэффицинтов b
+res.alphaX = [];
+res.alphaY = [];
+res.alphaZ = [];
+res.betaX = [];
+res.betaY = [];
+res.betaZ = [];
+res.Rd_1 = [];
+res.A = [];
+res.B = [];
+res.C = [];
+res.D4 = [];
+res.r_plus = [];
+res.r_minus = [];
+res.x = [];
+res.y = [];
+res.z = [];
+res.x1 = [];
+res.y1 = [];
+res.z1 = [];
+for i = 1:length(tracks)
+    for j = 1:length(tracks(i).poits)
+        for k = 1:3
+            res.Rd_1(i,j,1) = (tracks(i).poits(j).ToA(4)-tracks(i).poits(j).ToA(1))*config.c_ns;
+            res.Rd_1(i,j,2) = (tracks(i).poits(j).ToA(3)-tracks(i).poits(j).ToA(1))*config.c_ns;
+            res.Rd_1(i,j,3) = (tracks(i).poits(j).ToA(2)-tracks(i).poits(j).ToA(1))*config.c_ns;
+        end
+    end
+end
+%вычисляем кэфы а 1:3
+res.a(1) = config.posts(1,1)*config.posts(1,1) + config.posts(2,1)*config.posts(2,1)+config.posts(3,1)*config.posts(3,1);
+res.a(2) = config.posts(1,2)*config.posts(1,2) + config.posts(2,2)*config.posts(2,2)+config.posts(3,2)*config.posts(3,2);
+res.a(3) = config.posts(1,3)*config.posts(1,3) + config.posts(2,3)*config.posts(2,3)+config.posts(3,3)*config.posts(3,3);
+%вычисляем кэфы b 1:3
+for i = 1:length(tracks)
+    for j = 1:length(tracks(i).poits)
+        for k = 1:3
+            res.b(i,j,1) = 0.5*(res.a(1)-res.Rd_1(i,j,1)*res.Rd_1(i,j,1));
+            res.b(i,k,2) = 0.5*(res.a(2)-res.Rd_1(i,j,2)*res.Rd_1(i,j,2));
+            res.b(i,j,3) = 0.5*(res.a(3)-res.Rd_1(i,j,3)*res.Rd_1(i,j,3));
+        end
+    end
+end
+%Расчитываем дельта
+res.delta = config.posts(1,1)*(config.posts(2,2)*config.posts(3,3) + config.posts(2,3)*config.posts(3,2)) - config.posts(2,1)*(config.posts(1,3)*config.posts(3,2) ...
+    - config.posts(1,2)*config.posts(3,3)) + config.posts(3,1)*(config.posts(1,2)*config.posts(2,3)-config.posts(1,3)*config.posts(2,2));
+%рассчитываем альфаХ
+for i = 1:length(tracks)
+    for j = 1:length(tracks(i).poits)
+        for k = 1:3
+            res.alphaX(i,j,k) = (res.b(i,j,1)*(config.posts(2,2)*config.posts(3,3)-config.posts(2,3)*config.posts(3,2))-res.b(i,j,2)*(config.posts(2,1)* ...
+            config.posts(3,3)-config.posts(2,3)*config.posts(3,1))+res.b(i,j,3)*(config.posts(2,1)*config.posts(3,2)-config.posts(2,2)*config.posts(3,1)))./res.delta;
+            %рассчитываем бетаХ
+            res.betaX(i,j,k) = (res.Rd_1(i,j,1)*(config.posts(2,2)*config.posts(3,3)-config.posts(2,3)*config.posts(3,2))-res.Rd_1(i,j,2)*(config.posts(2,1)* ...
+            config.posts(3,3)-config.posts(2,3)*config.posts(3,1))+res.Rd_1(i,j,3)*(config.posts(2,1)*config.posts(3,2)-config.posts(2,2)*config.posts(3,1)))./res.delta;
+            %рассчитываем альфаY
+            res.alphaY(i,j,k) =(res.b(i,j,1)*(config.posts(1,3)*config.posts(3,2)-config.posts(1,2)*config.posts(3,3))-res.b(i,j,2)*(config.posts(1,3)* ...
+            config.posts(3,1)-config.posts(1,1)*config.posts(3,3))+res.b(i,j,3)*(config.posts(2,2)*config.posts(3,1)-config.posts(1,1)*config.posts(3,2)))./res.delta ;
+            %расчитваем бетаY
+            res.betaY(i,j,k) = (res.Rd_1(i,j,1)*(config.posts(1,3)*config.posts(3,2)-config.posts(1,2)*config.posts(3,3))-res.Rd_1(i,j,2)*(config.posts(1,3)* ...
+            config.posts(3,1)-config.posts(1,1)*config.posts(3,3))+res.Rd_1(i,j,3)*(config.posts(1,2)*config.posts(3,1)-config.posts(1,1)*config.posts(3,2)))./res.delta;
+            %рассчитываем alphaZ
+            res.alphaZ(i,j,k) = (res.b(i,j,1)*(config.posts(1,2)*config.posts(2,3)-config.posts(1,3)*config.posts(2,2))-res.b(i,j,2)*(config.posts(1,1) ...
+            *config.posts(2,3)-config.posts(1,3)*config.posts(2,1))+res.b(i,j,3)*(config.posts(1,1)*config.posts(2,2)-config.posts(1,2)*config.posts(2,1)))./res.delta;
+            %рассчитываем бетаZ
+            res.betaZ(i,j,k) = (res.Rd_1(i,j,1)*(config.posts(1,2)*config.posts(2,3)-config.posts(1,3)*config.posts(2,2))-res.Rd_1(i,j,2)*(config.posts(1,1)* ...
+            config.posts(2,3)-config.posts(1,3)*config.posts(2,1))+res.Rd_1(i,j,3)*(config.posts(1,1)*config.posts(2,2)-config.posts(1,2)*config.posts(1,2)))./res.delta;
+        end
+    end
+end
+%расчитаем коэф. а, b ,c
+for i = 1:length(tracks)
+    for j = 1:length(tracks(i).poits)
+        for k =1: 3
+            res.A(i,j,k) = res.betaX(i,j,k).^2 + res.betaY(i,j,k).^2 + res.betaY(i,j,k).^2 -1;
+            res.B(i,j,k) = res.alphaX(i,j,k)*res.betaX(i,j,k) + res.alphaY(i,j,k)*res.betaY(i,j,k) + res.alphaZ(i,j,k)*res.betaZ(i,j,k);
+            res.C(i,j,k) = res.alphaX(i,j,k).^2 + res.alphaY(i,j,k).^2 + res.alphaZ(i,j,k).^2;
+        end
+    end
+end
+
+%рассчитываем D4
+for i = 1:length(tracks)
+    for j = 1:length(tracks(i).poits)
+        for k =1 : 3
+            res.D4(i,j,k) = res.B(i,j,k).^2 - res.A(i,j,k)*res.C(i,j,k);
+            if res.D4(i,j,k)>0
+                    res.r_plus(i,j,k) = (-res.B(i,j,k) + sqrt(res.D4(i,j,k)))./res.A(i,j,k);
+                    res.r_minus(i,j,k) = (-res.B(i,j,k) - sqrt(res.D4(i,j,k)))./res.A(i,j,k);
+                    N = 2;
+                    res.x(i,j,k) = res.alphaX(i,j,k) + res.betaX(i,j,k)*res.r_plus(i,j,k);
+                    res.y(i,j,k) = res.alphaY(i,j,k) + res.betaY(i,j,k)*res.r_plus(i,j,k);
+                    res.z(i,j,k) = res.alphaZ(i,j,k) + res.betaZ(i,j,k)*res.r_plus(i,j,k);
+                    res.x1(i,j,k) = res.alphaX(i,j,k) + res.betaX(i,j,k)*res.r_minus(i,j,k);
+                    res.y1(i,j,k) = res.alphaY(i,j,k) + res.betaY(i,j,k)*res.r_minus(i,j,k);
+                    res.z1(i,j,k) = res.alphaZ(i,j,k) + res.betaZ(i,j,k)*res.r_minus(i,j,k);
+            end
+            if res.D4(i,j,k)==0
+                    res.r_one(i,j,k) = -res.B(i,j,k)./res.A(i,j,k);
+                    N = 1;
+                    res.x(i,j) = alphaX + betaX*r_one;
+                    x(0) = alphaY + betaY*r_one;
+                    x(0) = alphaZ + betaZ*r_one;
+                         
+            end
+        end
+    end
+end
+
+end
+if D4 == 0
+    r_one = -B./A;
+    N = 1;
+    x(0) = alphaX + betaX*r_one;
+    x(0) = alphaY + betaY*r_one;
+    x(0) = alphaZ + betaZ*r_one;
+else
+    N = 0;
+end 
+end
