@@ -7,9 +7,20 @@
   traj_params.h = 10e3; % высота над уровнем моря, м
   traj_params.time_interval = [0 600]; % временной отрезок, сек
   traj_params.track_id = 0;
+  % манёвры
   traj_params.count_mnv = 5; % количество манёвров
-  traj_params.type_mnv = [1 2]; % массив команд для манёвра 1 - прямая 2 - поворот, вполоть до окружности
+  traj_params.type_mnv = [1 2]; % массив команд для манёвра 1 - прямая, 2 - поворот, вполоть до окружности
   traj_params.omega = 0.3; % скорость изменения угла, градус в секунду
+  % ускорение/замедление 
+  traj_params.type_moov = [1 2 3]; 
+  %{
+  Это  type_moov - переменная содержащая типа изменения скорости,
+  где: 1 - скорость не меняется
+       2 - скорость увеличивается
+       3 - скорость увеличивается
+  %}
+  traj_params.acc_moov = 1.5; % ускорение м/с^2 
+
   track = make_geo_ultima(traj_params, config);
   
   % построим графики
@@ -17,6 +28,7 @@
   figure
   show_posts2D
   show_track2D(track)
+  for_test_synt
   %3D
   figure
   show_posts3D
@@ -44,9 +56,11 @@ for i = 1:N
     traj_params.h = 10e3 + 500 * randi([-4 4]); % высота над уровнем моря, м
     traj_params.time_interval = [0 600]; % временной отрезок, сек
     traj_params.track_id = i;
-    traj_params.count_mnv = 5;
-    traj_params.type_mnv = [1 2];
-    traj_params.omega = 0.3; % скорость изменения угла, градус в секунду
+    traj_params.count_mnv = 4;
+    traj_params.type_mnv = [1 2]; 
+    traj_params.omega = 0.6; % скорость изменения угла, градус в секунду
+    traj_params.Vdelta = [1 2 3]; 
+    traj_params.acc_delta = 2; % ускорение м/с^2 
     track = make_geo_ultima(traj_params, config);
     show_track3D(track);
     tracks(i) = track;
