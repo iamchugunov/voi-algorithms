@@ -13,6 +13,9 @@ function [track] = make_geo_ultima(traj_params, config)
 
     type_moov = traj_params.type_moov;
     acc_moov = traj_params.acc_moov;
+
+    dh = traj_params.dh;
+    type_dh = traj_params.type_dh;
     
 
     t = time_interval(1):1:time_interval(end);
@@ -24,64 +27,72 @@ function [track] = make_geo_ultima(traj_params, config)
     % начало суперфункции
     time_priquel = 2; % время предшествующего начала/конца предыдущего манёвра
     V_new = V;
+    h_new = h;
     for j = 1:(count_mnv)
-
-         index_type_mnv = randi(2,1); % случайное определение команды для манёвра
-         type_track = type_mnv(index_type_mnv); % тип манёвра 
-         turn_direction = randi(2,1); % случайное определение поворота(лево/право)
-
-         index_type_moov = randi(3,1); % случайное определение команды для изменения скорости
-         type_acc= type_moov(index_type_moov); % тип изменения скорости
-         
+         index_type_track = type_mnv(randi(2,1)); % тип манёвра 
+         turn_direction = randi(2,1); % случайное определение поворота(лево/право)  
+         index_type_moov= type_moov(randi(3,1)); % тип изменения скорости
+         index_type_dh = type_moov(randi(3,1)); % тип изменения скорости
          
          for i = time_priquel:(length(t)/count_mnv)*j
-
             % Ускорение
-            % возможное рещение проблемы and V > 100 and V < 1
-            if type_acc == 1
+            % возможное рещение проблемы and V > минимально возможной
+            % скорости полета  and V < максимально возможной скорости
+            % полёта. То же самое нужно будет сделать и для высоты: к
+            % сравнению типа высотной динамики добавить сравнение
+            % максимальной и минимальной высоты полёта в рамках реального
+            % мира
+            
+            if index_type_moov == 1
                 acc_moov = 0;
-            elseif type_acc == 2
+            elseif index_type_moov == 2 && V_new < 675
                 acc_moov = traj_params.acc_moov;
-            elseif type_acc == 3
-                acc_moov = - traj_params.acc_moov;    
+            elseif index_type_moov == 3 && V_new > 95
+                acc_moov = - traj_params.acc_moov; 
+            else 
+                acc_moov = 0;
             end
             
             % манёвры
             
-            if type_track == 1
+            if  index_type_track == 1
                 omega = 0;
-            elseif type_track == 2
+            elseif  index_type_track == 2
                 omega = traj_params.omega * pi/180;               
             end
+
+            % высота
+            
+            if index_type_dh == 1
+                dh = 0;
+            elseif index_type_dh == 2 && h_new < 35e3
+                dh = traj_params.dh * pi/180;
+            elseif index_type_dh == 3 && h_new > 305
+                dh = - traj_params.dh * pi/180;
+            else 
+                dh = 0;
+            end
+            
          
         V_new = V_new + acc_moov * (t(i)-t(i-1));
+        h_new = h_new + sin(dh)* (-1)^turn_direction  * (t(i)-t(i-1));
         kurs = kurs +  omega * (-1)^turn_direction * (t(i)-t(i-1));
         Vy = V_new * sin(kurs);
         Vx = V_new * cos(kurs);
 
-        track1.vxyi(i)=Vx;
-        track1.vhyi(i)=Vy;
-
+       
         X(1,i) = X(1,i-1) + Vx * (t(i) - t(i-1));
         X(2,i) = X(2,i-1) + Vy * (t(i) - t(i-1));
-        X(3,i) = h_geo_calc(X(1,i),X(2,i),h); %изменение высоты ( + i * 100)
+        X(3,i) = h_geo_calc(X(1,i),X(2,i),h_new); 
         dop(i) = get_dop_value(config, X(1,i), X(2,i), X(3,i),'ToA');
-        h_geo(:,i) = h;
+        h_geo(:,i) = h_new;
         end 
         time_priquel = i;
         
     end
    
     % конец суперфункции
-    
-   figure
-   plot(1:601,track1.vxyi);
-   hold on;
-   grid on;
-   plot(1:601,track1.vhyi);
-   hold off;
-    
-    
+        
     track.id = track_id;
     track.t = t;
     track.crd = X;
