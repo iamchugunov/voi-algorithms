@@ -14,8 +14,6 @@ function [track] = make_geo_ultima(traj_params, config)
     type_moov = traj_params.type_moov;
     acc_moov = traj_params.acc_moov;
 
-    dh = traj_params.dh;
-    type_dh = traj_params.type_dh;
     
 
     t = time_interval(1):1:time_interval(end);
@@ -61,21 +59,10 @@ function [track] = make_geo_ultima(traj_params, config)
                 omega = traj_params.omega * pi/180;               
             end
 
-            % высота
-            
-            if index_type_dh == 1
-                dh = 0;
-            elseif index_type_dh == 2 && h_new < 35e3
-                dh = traj_params.dh;
-            elseif index_type_dh == 3 && h_new > 305
-                dh = - traj_params.dh;
-            else 
-                dh = 0;
-            end
             
          
         V_new = V_new + acc_moov * (t(i)-t(i-1));
-        h_new = h_new + dh;
+      
         kurs = kurs +  omega * (-1)^turn_direction * (t(i)-t(i-1));
         Vy = V_new * sin(kurs);
         Vx = V_new * cos(kurs);
@@ -83,9 +70,9 @@ function [track] = make_geo_ultima(traj_params, config)
        
         X(1,i) = X(1,i-1) + Vx * (t(i) - t(i-1));
         X(2,i) = X(2,i-1) + Vy * (t(i) - t(i-1));
-        X(3,i) = h_geo_calc(X(1,i),X(2,i),h_new); 
+        X(3,i) = h_geo_calc(X(1,i),X(2,i),h); 
         dop(i) = get_dop_value(config, X(1,i), X(2,i), X(3,i),'ToA');
-        h_geo(:,i) = h_new;
+        h_geo(:,i) = h;
         end 
         time_priquel = i;
         
