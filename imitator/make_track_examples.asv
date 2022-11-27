@@ -21,7 +21,7 @@
   %}
   traj_params.acc_moov = 1; % ускорение м/с^2 
   %изменение высоты
-  traj_params.dh =0; %условное обозначние что за единицу времени высота изменится на n метров
+  traj_params.dh = 10; %условное обозначние что за единицу времени высота изменится на n метров
   traj_params.type_dh = [1 2 3];
   %{
   type_dh - переменная содержащая тип изменения высоты,
@@ -29,13 +29,13 @@
        2 - высота увеличивается
        3 - высота уменьшается 
   %}
-  
+
   if traj_params.count_mnv>0
   traj_paramsi=geo_input(traj_params,config);
   end
 
   track = make_geo_ultimaV2(traj_params,traj_paramsi, config);
-  %track = make_geo_ultima(traj_params, config);
+  %track = make_geo_track_circle(traj_params, config);
   % построим графики
   %2D
   figure

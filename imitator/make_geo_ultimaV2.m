@@ -1,4 +1,4 @@
-function [track] = make_geo_track_circle(traj_params, config)
+function [track] = make_geo_ultimaV2(traj_params,traj_paramsi, config)
 
     X0 = traj_params.X0;
     V = traj_params.V;
@@ -6,26 +6,51 @@ function [track] = make_geo_track_circle(traj_params, config)
     h = traj_params.h;
     time_interval = traj_params.time_interval;
     track_id = traj_params.track_id;
-    omega = traj_params.omega * pi/180; 
-    t = time_interval(1):1:time_interval(end);
-    
+    acc_moov=traj_paramsi.aman;
+    omega = traj_paramsi.omegaman * pi/180;
+    count_mnv = traj_params.count_mnv;
    
+    dh = traj_params.dh;
+    type_dh = traj_params.type_dh;
+    
+
+    t = time_interval(1):1:time_interval(end);
+
     X = [X0;h_geo_calc(X0(1),X0(2),h)];
     dop = get_dop_value(config, X(1,1), X(2,1), X(3,1),'ToA');
     h_geo(1,1) = h;
-    for i = 2:length(t)
-
-         kurs = kurs + omega * (t(i)-t(i-1));
-         Vy = V * sin(kurs);
-         Vx = V * cos(kurs);
+       
+    
+    
+    
+      V_new = V;     
+     
+        for i=2:length(t)
+         if (V_new < 675) && (V_new > 95)
+                acc_moov = traj_paramsi.aman(i); 
+         else 
+                acc_moov = 0;
+         end
         
+        
+        V_new = V_new + acc_moov * (t(i)-t(i-1));
+       
+        kurs = kurs +  omega *  (t(i)-t(i-1));
+        Vy= V_new * sin(kurs);
+        Vx= V_new* cos(kurs);
+
+
         X(1,i) = X(1,i-1) + Vx * (t(i) - t(i-1));
-        X(2,i) = X(2,i-1) + Vy * (t(i) - t(i-1));
-        X(3,i) = h_geo_calc(X(1,i),X(2,i),h); %изменение высоты ( + i * 100)
+        X(2,i) = X(2,i-1) + Vy* (t(i) - t(i-1));
+        X(3,i) = h_geo_calc(X(1,i),X(2,i),h); 
         dop(i) = get_dop_value(config, X(1,i), X(2,i), X(3,i),'ToA');
         h_geo(:,i) = h;
-    end
-    
+        end 
+        
+        
+   
+    % конец суперфункции
+        
     track.id = track_id;
     track.t = t;
     track.crd = X;
@@ -40,7 +65,5 @@ function [track] = make_geo_track_circle(traj_params, config)
     track.h_geo = h_geo;
     track.dop = dop;
     track.poits = [];
+    
 end
-
-
-

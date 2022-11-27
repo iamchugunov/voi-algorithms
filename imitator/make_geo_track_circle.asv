@@ -15,7 +15,7 @@ function [track] = make_geo_track_circle(traj_params, config)
     h_geo(1,1) = h;
     for i = 2:length(t)
 
-         kurs = kurs + omega * ;
+         kurs = kurs + omega * (t(i)-t(i-1));
          Vy = V * sin(kurs);
          Vx = V * cos(kurs);
 
