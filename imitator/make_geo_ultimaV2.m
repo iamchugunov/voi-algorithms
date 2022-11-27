@@ -40,8 +40,8 @@ function [track] = make_geo_ultimaV2(traj_params,traj_paramsi, config)
         Vx= V_new* cos(kurs);
 
 
-        X(1,i) = X(1,i-1) + Vx * (t(i) - t(i-1));
-        X(2,i) = X(2,i-1) + Vy* (t(i) - t(i-1));
+        X(1,i) = X(1,i-1) + Vx(i) * (t(i) - t(i-1));
+        X(2,i) = X(2,i-1) + Vy(i)* (t(i) - t(i-1));
         X(3,i) = h_geo_calc(X(1,i),X(2,i),h); 
         dop(i) = get_dop_value(config, X(1,i), X(2,i), X(3,i),'ToA');
         h_geo(:,i) = h;
