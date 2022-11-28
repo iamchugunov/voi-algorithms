@@ -41,7 +41,7 @@ clear all
 config = Config(); % конфиг содержит координаты постов
 
 % traj_params.X0 = [randi([-100 100]);randi([-100 100])]*1e3; % начальные координаты, м
-traj_params.X0 = [0; 0]*1e3; % начальные координаты, м
+traj_params.X0 = [150; 150]*1e3; % начальные координаты, м
 traj_params.V = 0; % скорость, м/c
 traj_params.kurs = 120; % направление, град
 traj_params.h = 10e3; % высота над уровнем моря, м
@@ -55,6 +55,7 @@ measurements_params.sigma_n_ns = 30;
 measurements_params.period_sec = 0.1;
 measurements_params.n_periods = 10;
 measurements_params.strob_dur = 0.12;
+% measurements_params.strob_dur = 1e8;
 track = make_measurements_for_track(track, measurements_params, config);
 
 
@@ -69,5 +70,10 @@ get_rd_from_poits(track.poits)
 figure
 show_posts2D
 show_track2D(track)
-show_hyperb_poits(track.poits(1:30), config)
+% show_hyperb_poits(track.poits(1:30), config)
 show_primary_points2D(track.poits)
+figure
+nms = find([track.poits.crd_valid]);
+plot([track.poits(nms).true_ToT] - [track.poits(nms).est_ToT],'.')
+figure
+plot([track.poits(nms).true_crd]' - [track.poits(nms).est_crd]','.')

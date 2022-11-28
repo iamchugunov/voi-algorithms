@@ -60,3 +60,24 @@ end
 figure
 get_rd_from_poits(poits);
 %%
+%% создать один трек UWB
+  config = Config(); % конфиг содержит координаты постов
+  config.posts = [0 10 0 10; 0 0 10 10; 0 0 0 0];
+  config.sigma_n_ns = 0.1;
+  % формирование траектории
+  traj_params.X0 = [3.5; 7.6]; % начальные координаты, м
+  traj_params.V = 0.01*0; % скорость, м/c
+  traj_params.kurs = 120; % направление, град
+  traj_params.h = 0; % высота над уровнем моря, м
+  traj_params.time_interval = [0 600]; % временной отрезок, сек
+  traj_params.track_id = 0;
+  track = make_geo_track(traj_params, config);
+  track.crd(3,:) = 1;
+  
+  measurements_params.sigma_n_ns = config.sigma_n_ns;
+  measurements_params.period_sec = 0.1;
+  measurements_params.n_periods = 0;
+  measurements_params.strob_dur = 1000000;
+  track = make_measurements_for_track(track, measurements_params, config);
+  figure
+  get_rd_from_poits(track.poits)

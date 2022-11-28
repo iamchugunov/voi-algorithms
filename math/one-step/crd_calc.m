@@ -3,7 +3,7 @@ function [poit] = crd_calc(poit, config)
     pd = poit.ToA * config.c_ns;
     mnk_params.epsilon = 0.001;
     mnk_params.max_iter = 20;
-    mnk_params.X0 = [1000;1000;5000;0];
+    mnk_params.X0 = [1000;1000;10000;pd(1)];
     mnk_params.nev_threshold = 1;
     mnk_params.R_max = 500e3;
     

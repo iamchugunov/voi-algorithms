@@ -1,6 +1,4 @@
 %% создать один трек
-clear all
-close all
   config = Config(); % конфиг содержит координаты постов
   % формирование траектории
   traj_params.X0 = [50e3; -50e3]; % начальные координаты, м
@@ -17,14 +15,13 @@ close all
   measurements_params.strob_dur = 0.12;
   track = make_measurements_for_track(track, measurements_params, config);
   
-  sigma_ksi = 100;
   X0 = [track.poits(1).true_crd(1,1); 
       track.poits(1).true_vel(1,1); 
       track.poits(1).true_crd(2,1); 
       track.poits(1).true_vel(2,1); 
       track.poits(1).true_crd(3,1); 
       track.poits(1).true_vel(3,1);];
-  KFilter_res_rd = RDKalmanFilter3D(track, config, X0, sigma_ksi);
+  KFilter_res_rd = RDKalmanFilter3D(track, config, X0, 1);
   X0 = [track.poits(1).true_crd(1,1); 
       track.poits(1).true_vel(1,1); 
       track.poits(1).true_crd(2,1); 
@@ -32,7 +29,7 @@ close all
       track.poits(1).true_crd(3,1); 
       track.poits(1).true_vel(3,1);
       track.poits(1).true_ToT];
-  KFilter_res_pd = PDKalmanFilter3D_T(track, config, X0, sigma_ksi);
+  KFilter_res_pd = PDKalmanFilter3D_T(track, config, X0, 1);
   for i = 1:length(track.poits)
     track.poits(i) = crd_calc(track.poits(i),config);
   end
@@ -47,13 +44,6 @@ close all
   err_v_pd = KFilter_res_pd.X([2 5 8],:) - [track.poits.true_vel];
   
   figure
-  plot(KFilter_res_rd.t,3*sqrt(KFilter_res_rd.Dx(1,:)))
-  hold on
-  plot([track.poits.Frame],err_x_rd(1,:),'.-')
-   figure
-  plot(KFilter_res_pd.t,3*sqrt(KFilter_res_pd.Dx(1,:)))
-  hold on
-  plot([track.poits.Frame],err_x_pd(1,:),'.-')
   
   
 %%
