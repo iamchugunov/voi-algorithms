@@ -9,7 +9,7 @@ function [config] = Config()
     hp = 15;
     alphap = [30 150 270]*pi/180;
     for i = 1:3
-        posts(:,i) = [R * cos(alphap(i)); R * sin(alphap(i)); hp];
+        posts(:,i) = [R * cos(alphap(i)); R * sin(alphap(i)); hp + normrnd(0, 5)];
     end
     posts(:,4) = [0;0;hp];
 %     posts = [-5e3 -5e3 5e3 5e3; -5e3 5e3 -5e3 5e3; 100 100 100 100];

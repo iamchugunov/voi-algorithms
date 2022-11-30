@@ -1,4 +1,4 @@
-function [poits, res] = thinning_measurements(poits, params)
+function [poits, res] = thinning_measurements(poits, params, config)
     % функция предназначена для прореживания измерений - формирования
     % двоек, троек, четверок
     % есть два режима mode: 
@@ -22,14 +22,13 @@ function [poits, res] = thinning_measurements(poits, params)
                         N2 = randi([1 4]);
                     end
                     poits(i).ToA([N1 N2]) = 0;
-                    
+                    poits(i).count = 2;
                 elseif rand_number < percentage(1) + percentage(2)
                     poits(i).ToA(randi([1 4])) = 0;
                     poits(i).count = 3;
                 else
                     poits(i).count = 4;
                 end                
-                poits(i).rd = zeros(6,1);
             case 1
                 poits(i).ToA(banned_post) = 0;
                 poits(i).count = 3;
@@ -44,15 +43,11 @@ function [poits, res] = thinning_measurements(poits, params)
                 poits(i).rd_flag(j,1) = 1;
             end
         end
-        
-        end
-            rd(1,1) = (ToA(4) - ToA(1))*config.c_ns;
-            rd(2,1) = (ToA(4) - ToA(2))*config.c_ns;
-            rd(3,1) = (ToA(4) - ToA(3))*config.c_ns;
-            rd(4,1) = (ToA(3) - ToA(1))*config.c_ns;
-            rd(5,1) = (ToA(3) - ToA(2))*config.c_ns;
-            rd(6,1) = (ToA(2) - ToA(1))*config.c_ns;
     end
+    
+    res.percentage(1) = 100 * length(find([poits.count] == 2))/length(poits);
+    res.percentage(2) = 100 * length(find([poits.count] == 3))/length(poits);
+    res.percentage(3) = 100 * length(find([poits.count] == 4))/length(poits);
     
     
 end

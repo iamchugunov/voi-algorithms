@@ -17,6 +17,6 @@ function [] = show_hyperbols(toa, posts, z, Master)
     for i = 1:length(nums)
         plot(out{i}(1,:)/1000,out{i}(2,:)/1000,['.' colors(i)])
     end
-    legend('1','2','3','4','5')
+%     legend('1','2','3','4','5')
 end
 

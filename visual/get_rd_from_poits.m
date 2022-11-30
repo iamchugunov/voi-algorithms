@@ -6,19 +6,19 @@ function [RD] = get_rd_from_poits(poits)
     k5 = 0;
     k6 = 0;
     
-    t1 = [];
-    t2 = [];
-    t3 = [];
-    t4 = [];
-    t5 = [];
-    t6 = [];
+    t1 = 0;
+    t2 = 0;
+    t3 = 0;
+    t4 = 0;
+    t5 = 0;
+    t6 = 0;
     
-    rd1 = [];
-    rd2 = [];
-    rd3 = [];
-    rd4 = [];
-    rd5 = [];
-    rd6 = [];
+    rd1 = 0;
+    rd2 = 0;
+    rd3 = 0;
+    rd4 = 0;
+    rd5 = 0;
+    rd6 = 0;
     
     t0 = poits(1).Frame;
 %     t0 = 0;
