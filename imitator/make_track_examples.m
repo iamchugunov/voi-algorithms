@@ -94,10 +94,11 @@ config = Config(); % конфиг содержит координаты пост
   traj_params.h = 10e3; % высота над уровнем моря, м
   traj_params.time_interval = [0 600]; % временной отрезок, сек
   traj_params.track_id = 0; 
-  
+  traj_params.maneur=geo_input(traj_params);
+
 % track = make_geo_ultima(traj_params, config);
-  traj_paramsi = geo_input(traj_params);
-  track = make_geo_track_new(traj_params,traj_paramsi, config);
+  
+  track = make_geo_track_new(traj_params, config);
   % построим графики
   %2D
   figure

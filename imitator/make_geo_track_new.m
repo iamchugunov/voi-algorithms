@@ -1,4 +1,4 @@
-function [track] = make_geo_track_new(traj_params,traj_paramsi, config)
+function [track] = make_geo_track_new(traj_params, config)
 
     X0 = traj_params.X0;
     V = traj_params.V;
@@ -6,9 +6,9 @@ function [track] = make_geo_track_new(traj_params,traj_paramsi, config)
     h = traj_params.h;
     time_interval = traj_params.time_interval;
     track_id = traj_params.track_id;
-    acc_moov=traj_paramsi.aman;
-    omega = traj_paramsi.omegaman * pi/180;
-    count_mnv = traj_paramsi.count_mnv;
+    %acc_moov=traj_params.aman;
+    omega = traj_params.maneur.omegaman * pi/180;
+    count_mnv = traj_params.maneur.count_mnv;
 
 
 
@@ -25,7 +25,7 @@ function [track] = make_geo_track_new(traj_params,traj_paramsi, config)
 
         for i=2:length(t)
          if (V_new < 675) && (V_new > 95)
-                acc_moov = traj_paramsi.aman(i); 
+                acc_moov = traj_params.maneur.aman(i); 
          else 
                 acc_moov = 0;
          end
