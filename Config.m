@@ -1,5 +1,5 @@
 function [config] = Config()
-
+%����
 %% общие параметры
     config.c = 299792458;
     config.c_ns = config.c/1e9;
