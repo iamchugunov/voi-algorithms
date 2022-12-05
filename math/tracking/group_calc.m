@@ -21,10 +21,10 @@ function [SV] = group_calc(poits, config)
     SV.z0 = koef(1) + koef(2) * (t(end) - t(1));
     SV.vz = koef(2);
     
-    
-%     show_posts3D
-%     show_primary_points3D(poits)
-%     plot3(X/1000,Y/1000,Z/1000,'.-')
-
+    %{
+    show_posts3D
+    show_primary_points3D(poits)
+    plot3(X/1000,Y/1000,Z/1000,'.-')
+    %}
 end
 
