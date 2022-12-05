@@ -5,12 +5,12 @@
   traj_params.V = 200; % скорость, м/c
   traj_params.kurs = 120; % направление, град
   traj_params.h = 10e3; % высота над уровнем моря, м
-  traj_params.time_interval = [0 600]; % временной отрезок, сек
+  traj_params.time_interval = [0 1600]; % временной отрезок, сек
   traj_params.track_id = 0;
   % манёвры
-  traj_params.count_mnv = 4; % количество манёвров
+  traj_params.count_mnv = 9; % количество манёвров
   traj_params.type_mnv = [1 2]; % массив команд для манёвра 1 - прямая, 2 - поворот, вполоть до окружности
-  traj_params.omega = 3; % скорость изменения угла, градус в секунду
+  traj_params.omega = 0.6; % скорость изменения угла, градус в секунду
   % ускорение/замедление
   traj_params.type_moov = [1 2 3];
   %{
@@ -19,11 +19,11 @@
        2 - скорость увеличивается
        3 - скорость уменьшается
   %}
-  traj_params.acc_moov = 3; % ускорение м/с^2
+  traj_params.acc_moov = 0.5; % ускорение м/с^2
 
  
   
-  %track = make_geo_ultima(traj_params, config);
+  track = make_geo_ultima(traj_params, config);
   % построим графики
   %2D
   figure
@@ -84,7 +84,7 @@ end
 [poits] = merge_measurements(tracks);
 figure
 get_rd_from_poits(poits);
-%%
+%% манёвренные траектория 
 
 config = Config(); % конфиг содержит координаты постов
   % формирование траектории
@@ -94,17 +94,19 @@ config = Config(); % конфиг содержит координаты пост
   traj_params.h = 10e3; % высота над уровнем моря, м
   traj_params.time_interval = [0 600]; % временной отрезок, сек
   traj_params.track_id = 0; 
+  geo_input_instruction = 1; % 1 - ручной ввод; 2 - тип ма
+  traj_params.maneur = geo_input(traj_params, geo_input_instruction);
   
 
 % track = make_geo_ultima(traj_params, config);
-  traj_params.maneursgeo_input(traj_params);
+  
   track = make_geo_track_new(traj_params, config);
+  
   % построим графики
   %2D
   figure
   show_posts2D
   show_track2D(track)
-
   show_mod_V(traj_params,track)
   %3D
   figure

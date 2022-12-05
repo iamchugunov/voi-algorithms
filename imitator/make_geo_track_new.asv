@@ -1,4 +1,4 @@
-function [track] = make_geo_track_new(traj_params,traj_paramsi, config)
+function [track] = make_geo_track_new(traj_params, config)
 
     X0 = traj_params.X0;
     V = traj_params.V;
@@ -6,11 +6,17 @@ function [track] = make_geo_track_new(traj_params,traj_paramsi, config)
     h = traj_params.h;
     time_interval = traj_params.time_interval;
     track_id = traj_params.track_id;
-    acc_moov=traj_paramsi.aman;
-    omega = traj_paramsi.omegaman * pi/180;
-    count_mnv = traj_paramsi.count_mnv;
+    %acc_moov=traj_params.aman;
+    gii = traj_params.geo_input_instruction;
+    omega = traj_params.maneur.omega_mnu * pi/180;
 
-
+    if gii == 0
+        count_mnv = 0;
+    elseif gii == 1
+        count_mnv = 3;
+    elseif gii == 1
+        count_mnv = traj_params.maneur.count_mnv;
+    end
 
     t = time_interval(1):1:time_interval(end);
 
@@ -18,36 +24,25 @@ function [track] = make_geo_track_new(traj_params,traj_paramsi, config)
     dop = get_dop_value(config, X(1,1), X(2,1), X(3,1),'ToA');
     h_geo(1,1) = h;
 
+    V_new = V;
 
-
-
-      V_new = V;
-
-        for i=2:length(t)
-         if (V_new < 675) && (V_new > 95)
-                acc_moov = traj_paramsi.aman(i); 
-         else 
-                acc_moov = 0;
-         end
-
+    for i=2:length(t)
+        if (V_new < 675) && (V_new > 95)
+            acc_moov = traj_params.maneur.a_mnu(i); 
+        else 
+            acc_moov = 0;
+        end
 
         V_new = V_new + acc_moov * (t(i)-t(i-1));
-        
         kurs = kurs +  omega(i) *  (t(i)-t(i-1));
         %Vy= V_new * sin(kurs);
         %Vx= V_new * cos(kurs);
-
-
         X(1,i) = X(1,i-1) + V_new * cos(kurs) * (t(i) - t(i-1));
         X(2,i) = X(2,i-1) + V_new * sin(kurs) * (t(i) - t(i-1));
         X(3,i) = h_geo_calc(X(1,i),X(2,i),h); 
         dop(i) = get_dop_value(config, X(1,i), X(2,i), X(3,i),'ToA');
         h_geo(:,i) = h;
-        end 
-
-
-
-    % конец суперфункции
+     end 
 
     track.id = track_id;
     track.t = t;

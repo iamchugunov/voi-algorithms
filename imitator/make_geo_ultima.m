@@ -30,16 +30,10 @@ function [track] = make_geo_ultima(traj_params, config)
          turn_direction = randi(2,1); % случайное определение поворота(лево/право)
          index_type_track = type_mnv(randi(2,1)); % тип манёвра   
          index_type_moov= type_moov(randi(3,1)); % тип изменения скорости
-         index_type_dh = type_moov(randi(3,1)); % тип изменения скорости
+        
          
          for i = time_priquel:(length(t)/count_mnv)*j
-            % Ускорение
-            % возможное рещение проблемы and V > минимально возможной
-            % скорости полета  and V < максимально возможной скорости
-            % полёта. То же самое нужно будет сделать и для высоты: к
-            % сравнению типа высотной динамики добавить сравнение
-            % максимальной и минимальной высоты полёта в рамках реального
-            % мира
+           
             
             if index_type_moov == 1
                 acc_moov = 0;
@@ -78,7 +72,7 @@ function [track] = make_geo_ultima(traj_params, config)
         
     end
    
-    % конец суперфункции
+  
         
     track.id = track_id;
     track.t = t;
