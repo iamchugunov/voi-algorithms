@@ -65,8 +65,8 @@ function [RD] = get_rd_from_poits(poits)
     plot(t6-t0,rd6*0.299792458000000,sym)
     legend('4-1','4-2','4-3','3-1','3-2','2-1')
     grid on
-    xlabel('t, сек')
-    ylabel('Разность хода, м')
+    xlabel('t, sec')
+    ylabel('tdoa, m')
     
     RD = [];
     RD(1).rd = rd1*0.299792458000000;

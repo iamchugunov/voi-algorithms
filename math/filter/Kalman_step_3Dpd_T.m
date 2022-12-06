@@ -1,7 +1,5 @@
 function [X, Dx, discr] = Kalman_step_3Dpd_T(y, X_prev, Dx, dt, sigma_n, D_ksi, config)
-    % шаг псевдодальномерного фильтра калмана при условии известного
-    % периода излучения
-    % вектор состояния X = [x vx ax y vy ay z vz az tot]
+    % pd-kalman with knonw dT X = [x vx ax y vy ay z vz az tot]
     nums = find(y ~= 0);
     posts = config.posts(:,nums);
     y = y(nums);

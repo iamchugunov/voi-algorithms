@@ -1,13 +1,10 @@
 function [poits, res] = thinning_measurements(poits, params, config)
-    % функция предназначена для прореживания измерений - формирования
-    % двоек, троек, четверок
-    % есть два режима mode: 
-    % mode=0 - равномерное распределение
-    % mode=1 - исключения одного поста полностью
-    % percentage - процентное соотношение двоек/троек/четверок
-    % сумма должна быть равна 1
-    % пример percentage [0.5 0.4 0.1];
-    % banned_post - номер выключенного поста для режима 1
+    % function for making twos, thres and fours
+    % two modes of work: 
+    % mode=0 - all posts randomly
+    % mode=1 - clear thres (without one post)
+    % percentage - example [0.5 0.4 0.1];
+    % banned_post - number for post in mode 1
     mode = params.mode;
     percentage = params.percentage;
     banned_post = params.banned_post;

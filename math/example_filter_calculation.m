@@ -1,13 +1,12 @@
-%% создать один трек
+
 clear all
 close all
-  config = Config(); % конфиг содержит координаты постов
-  % формирование траектории
-  traj_params.X0 = [50e3; -50e3]; % начальные координаты, м
-  traj_params.V = 200; % скорость, м/c
-  traj_params.kurs = 120; % направление, град
-  traj_params.h = 10e3; % высота над уровнем моря, м
-  traj_params.time_interval = [0 600]; % временной отрезок, сек
+  config = Config(); 
+  traj_params.X0 = [50e3; -50e3]; 
+  traj_params.V = 200; 
+  traj_params.kurs = 120; 
+  traj_params.h = 10e3; 
+  traj_params.time_interval = [0 600];
   traj_params.track_id = 0;
   track = make_geo_track(traj_params, config);
   
