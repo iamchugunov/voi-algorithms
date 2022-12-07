@@ -95,10 +95,7 @@ config = Config(); % конфиг содержит координаты пост
   traj_params.time_interval = [0 600]; % временной отрезок, сек
   traj_params.track_id = 0; 
     
-  traj_params.maneurs=geo_input(traj_params);
-
-
-% track = make_geo_ultima(traj_params, config);
+  traj_params.maneurs=geo_input();
   
   track = make_geo_track_new(traj_params, config);
   

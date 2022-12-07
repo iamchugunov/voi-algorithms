@@ -1,23 +1,31 @@
 function [maneurs]= geo_input(traj_params)
-    t=traj_params.time_interval(2);
-    time_interval = traj_params.time_interval(1):1:traj_params.time_interval(end);
-    % maneurs.dannie(1,1)='T0';
-    % maneurs.dannie(2,1)='T';
-    % maneurs.dannie(3,1)='acceleration';
-    % maneurs.dannie(4,1)='omega';
-    maneurs.count_mnv = input('Kollichestvo manevrov: ');
-        for j = 2:maneurs.count_mnv+1
+       
+    count_mnv = input('Kollichestvo manevrov: ');
+    if count_mnv~=0
+        for j = 1:count_mnv
             disp('Vvedite nachalo i konetc manevra');
             
-            maneurs(j).t0=j;
-            maneurs(j).t0=input('Vremya nachala manevra, time_start = ');
-            maneurs(j).dannie(3,:)=input('Vremya okonchaniya manevra, time_end = ');
             
-            maneurs(j).dannie(4,:)= input('Acceleration, acc = ');
-            maneurs(j).dannie(5,:)=input('Angle, omega = ');
+            maneurs(j).t0=input('Vremya nachala manevra, time_start = ');
+            maneurs(j).t=input('Vremya okonchaniya manevra, time_end = ');
+            if j == 2
+                while (maneurs(j).t0<= maneurs(j-1).t )
+                maneurs(j).t0=input('Pravilnoe Vremya nachala manevra, time_start = ');
+                end
+            end
+                while (maneurs(j).t0-round(maneurs(j).t0)~=0 || maneurs(j).t0<0  )
+                    maneurs(j).t0=input('Pravilnoe Vremya nachala manevra, time_start = ');
+                end
+                while (maneurs(j).t-round(maneurs(j).t)~=0 || maneurs(j).t<0 || maneurs(j).t<= maneurs(j).t0)
+                    maneurs(j).t=input('Pravilnoe Vremya okonchania manevra, time_end = ');
+                end
+            maneurs(j).acc= input('Acceleration, acc = ');
+            maneurs(j).omega=input('Angle, omega = ');
            
         end
-    
+    else
+        maneurs=[];
+    end
 
 end
 
