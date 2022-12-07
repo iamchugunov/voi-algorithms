@@ -7,16 +7,17 @@ function [track] = make_geo_track_new(traj_params, config)
     time_interval = traj_params.time_interval;
     track_id = traj_params.track_id;
     %acc_moov=traj_params.aman;
-    gii = traj_params.geo_input_instruction;
-    omega = traj_params.maneur.omega_mnu * pi/180;
-
-    if gii == 0
-        count_mnv = 0;
-    elseif gii == 1
-        count_mnv = 3;
-    elseif gii == 1
-        count_mnv = traj_params.maneur.count_mnv;
+   
+    time_start=traj_params.maeurs.time_start;
+    time_end=traj_params.maeurs.time_end;
+    
+    for j=1:count_mnv
+       for i=time_start(j):time_end(j)
+                maneurs.a_mnu(i) = acc(j);
+                maneurs.omega_mnu(i) =  acc(j)* pi/180;
+      end
     end
+    omega =maneurs.omega_mnu ;
 
     t = time_interval(1):1:time_interval(end);
 

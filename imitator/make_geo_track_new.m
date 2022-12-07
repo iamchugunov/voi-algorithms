@@ -7,9 +7,18 @@ function [track] = make_geo_track_new(traj_params, config)
     time_interval = traj_params.time_interval;
     track_id = traj_params.track_id;
     %acc_moov=traj_params.aman;
+   
     
-    omega = traj_params.maneur.omega_mnu * pi/180;
-
+     a_mnu=zeros(1,traj_params.time_interval(2)+1);
+     omega=zeros(1,traj_params.time_interval(2)+1);
+    for j=1:length(traj_params.maneurs)
+       
+       for i=traj_params.maneurs(j).t0:traj_params.maneurs(j).t
+                a_mnu(i) = traj_params.maneurs(j).acc;
+                omega(i) =  traj_params.maneurs(j).omega* pi/180;
+       end
+    end
+  
     t = time_interval(1):1:time_interval(end);
 
     X = [X0;h_geo_calc(X0(1),X0(2),h)];
@@ -20,7 +29,7 @@ function [track] = make_geo_track_new(traj_params, config)
 
     for i=2:length(t)
         if (V_new < 675) && (V_new > 95)
-            acc_moov = traj_params.maneur.a_mnu(i); 
+            acc_moov = a_mnu(i); 
         else 
             acc_moov = 0;
         end

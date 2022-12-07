@@ -94,16 +94,9 @@ config = Config(); % конфиг содержит координаты пост
   traj_params.h = 10e3; % высота над уровнем моря, м
   traj_params.time_interval = [0 600]; % временной отрезок, сек
   traj_params.track_id = 0; 
-  traj_params.geo_input_instruction = 3; %
-% 0 - прямая,
-% 1 - ручной ввод, 
-% 2 - предустановленный манёвр 1,
-% 3 - предустановленный манёвр 2,
-% 4 - предустановленный манёвр 2
+    
+  traj_params.maneurs=geo_input(traj_params);
 
-
-  traj_params.maneur = geo_input(traj_params);
-  
 
 % track = make_geo_ultima(traj_params, config);
   
@@ -124,6 +117,7 @@ config = Config(); % конфиг содержит координаты пост
 
   measurements_params.sigma_n_ns = 10;
   measurements_params.period_sec = 1;
+
   measurements_params.n_periods = 0;
   measurements_params.strob_dur = 0.12;
   track = make_measurements_for_track(track, measurements_params, config);
