@@ -4,13 +4,36 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
     period_sec = measurements_params.period_sec;
     n_periods = measurements_params.n_periods;
     strob_dur = measurements_params.strob_dur;
+    s_ksi = measurements_params.s_ksi;
     
     t = track.t;
     current_t = t(1);
-    k = 0;
+    
+%     k = 0;
+%     while current_t < t(end)
+%         k = k + 1;
+%         ToT(k) = current_t + period_sec * ( 1 + randi([0 n_periods]) );
+%         current_t = ToT(k);
+%     end
+    k = 1;
+    ToT(k) = current_t + period_sec;
+    drift(k) = 0;
     while current_t < t(end)
         k = k + 1;
-        ToT(k) = current_t + period_sec * ( 1 + randi([0 n_periods]) );
+        % WE CAN CHOOSE MODEL OF DRIFT
+        % 1. mark 1
+        drift(k) = drift(k - 1) + period_sec * normrnd(0, s_ksi);
+        % 1. mark 2
+        %     drift(i) = drift(i-1) + T * drift_t(i-1);
+        %     drift_t(i) = drift_t(i-1) + T * normrnd(0, s_ksi);
+        % 3. linear
+        %     drift(i) = drift(i-1) + T * shift_v;
+        % 4. const
+        %     drift(i) = shift_const;
+        % 5. WGN
+        %     drift(i) = normrnd(0, s_ksi);
+        
+        ToT(k) = ToT(k-1) + (1 - drift(k-1))*period_sec;
         current_t = ToT(k);
     end
     
@@ -26,10 +49,28 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
             crd(3,:) + vel(3,:) * dt; vel(3,:);];
     end
     
-    poits = [];
+%     poits = [];
     posts = config.posts;
     
+    k = 0;
     t_strob = 0;
+    
+    poit = struct('Frame',[],...
+        'ToA',[],...
+        'Ranges',[],...
+        'rd',[],...
+        'rd_flag',[],...
+        'count', [],...
+        'true_ToT', [],...
+        'true_crd', [],...
+        'true_vel', [],...
+        'h_geo', [],...
+        'track_id', [],...
+        'crd_valid', [],...
+        'est_ToT', [],...
+        'est_crd', [],...
+        'res', []);
+    poits(1:length(ToT)) = poit;
     while t_strob < t(end)
         nms = find(ToT < t_strob + strob_dur);
         for j = 1:length(nms)
@@ -67,7 +108,8 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
             poit.est_ToT = 0;
             poit.est_crd = zeros(3,1);
             poit.res = [];
-            poits = [poits poit];
+            k = k + 1;
+            poits(k) = poit;% = [poits poit];
             
         end
         ToT(nms) = [];
@@ -76,7 +118,7 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
     end     
         
     
-    track.poits = poits;
+    track.poits = poits(1:k);
 end
 
 

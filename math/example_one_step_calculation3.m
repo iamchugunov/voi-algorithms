@@ -1,17 +1,15 @@
-%% расчет в стационарной точке
-clear all
-config = Config(); % конфиг содержит координаты постов
 
-traj_params.X0 = [randi([-100 100]);randi([-100 100])]*1e3; % начальные координаты, м
-% traj_params.X0 = [50; 50]*1e3; % начальные координаты, м
-traj_params.V = 0; % скорость, м/c
-traj_params.kurs = 120; % направление, град
-traj_params.h = 10e3; % высота над уровнем моря, м
-traj_params.time_interval = [0 100]; % временной отрезок, сек
+clear all
+config = Config(); 
+
+traj_params.X0 = [randi([-100 100]);randi([-100 100])]*1e3; 
+% traj_params.X0 = [50; 50]*1e3; 
+traj_params.V = 0; 
+traj_params.kurs = 120; 
+traj_params.h = 10e3; 
+traj_params.time_interval = [0 100]; 
 traj_params.track_id = 0;
 track = make_geo_track(traj_params, config);
-
-% формирование измерений
 
 measurements_params.sigma_n_ns = config.sigma_n_ns*0;
 measurements_params.period_sec = 0.1;
