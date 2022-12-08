@@ -1,11 +1,13 @@
 %% make one track
+close all
+clear all
   config = Config(); 
   % track constructor
   traj_params.X0 = [50e3; -50e3]; % 
   traj_params.V = 200; % 
   traj_params.kurs = 120; % 
   traj_params.h = 10e3; % 
-  traj_params.time_interval = [0 600]; % 
+  traj_params.time_interval = [0 30]; % 
   traj_params.track_id = 0;
   track = make_geo_track(traj_params, config);
   % visual
@@ -21,9 +23,10 @@
   % measurements constructor
   
   measurements_params.sigma_n_ns = config.sigma_n_ns;
-  measurements_params.period_sec = 0.1;
+  measurements_params.period_sec = 0.001;
   measurements_params.n_periods = 0;
   measurements_params.strob_dur = 0.12;
+  measurements_params.s_ksi = 1e-6;
   track = make_measurements_for_track(track, measurements_params, config);
   figure
   get_rd_from_poits(track.poits)

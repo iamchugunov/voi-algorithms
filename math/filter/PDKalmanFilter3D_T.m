@@ -1,4 +1,4 @@
-function [KFilter] = PDKalmanFilter3D_T(track, config, X0, s_ksi)
+function [KFilter] = PDKalmanFilter3D_T(track, config, X0, s_ksi, T)
     poits = track.poits;
     s_n = config.c_ns * config.sigma_n_ns;
     D_ksi = eye(3) * s_ksi^2;
@@ -7,7 +7,8 @@ function [KFilter] = PDKalmanFilter3D_T(track, config, X0, s_ksi)
     Dx_hist(:,1) = diag(Dx);
     X = X_prev;
     for i = 2:length(poits)
-        dt = poits(i).true_ToT - poits(i-1).true_ToT;
+%         dt = poits(i).true_ToT - poits(i-1).true_ToT;
+        dt = T;
         [X(:,i), Dx, discr] = Kalman_step_3Dpd_T(poits(i).ToA*config.c_ns + poits(i).Frame * config.c, X(:,i-1), Dx, dt, s_n, D_ksi, config); 
         Dx_hist(:,i) = diag(Dx);
     end
