@@ -1,0 +1,32 @@
+function [X] = process_track(track, config, process_params)
+    T_nak = process_params.T_nak;
+    T_res = process_params.T_res;
+    
+    poits = track.poits;
+    t = [];
+    X = [];
+    t_res_last = poits(1).Frame;
+    k = 0;
+    for i = 1:length(poits)
+        if poits(i).Frame - t_res_last > T_res
+            k = k + 1;
+            t_res_last = poits(i).Frame;
+            current_poits = poits(i);
+            k1 = 0;
+            for j = 1:i
+                if poits(i).Frame - poits(j).Frame < T_nak
+                    k1 = k1 + 1;
+                    current_poits(k1) = poits(j);
+                end
+            end
+            t(k) = t_res_last;
+            SV(k) = group_calc(current_poits, config);
+            X(:,k) = [SV(k).x0;SV(k).vx;SV(k).y0;SV(k).vy;SV(k).z0;SV(k).vz;];
+        end
+    end
+    
+    a = 0.5;
+    b
+    
+end
+
