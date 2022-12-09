@@ -9,8 +9,12 @@ function [KFilter] = PDKalmanFilter3D_T(track, config, X0, s_ksi, T)
     for i = 2:length(poits)
 %         dt = poits(i).true_ToT - poits(i-1).true_ToT;
         dt = T;
-        [X(:,i), Dx, discr] = Kalman_step_3Dpd_T(poits(i).ToA*config.c_ns + poits(i).Frame * config.c, X(:,i-1), Dx, dt, s_n, D_ksi, config); 
+        nms = find(poits(i).ToA == 0);
+        y = poits(i).ToA*config.c_ns + poits(i).Frame * config.c;
+        y(nms) = 0;
+        [X(:,i), Dx, discr] = Kalman_step_3Dpd_T(y, X(:,i-1), Dx, dt, s_n, D_ksi, config); 
         Dx_hist(:,i) = diag(Dx);
+        d(:,i) = discr;
     end
     KFilter.t = [poits.Frame];
     KFilter.X = X;
@@ -22,6 +26,7 @@ function [KFilter] = PDKalmanFilter3D_T(track, config, X0, s_ksi, T)
     X_true([3 6 9],:) = 0;
     X_true(10,:) = [track.poits.true_ToT] * config.c;
     KFilter.err = X - X_true;
+    KFilter.discr = d;
 end
 
 

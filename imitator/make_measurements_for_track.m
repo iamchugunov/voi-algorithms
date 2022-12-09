@@ -86,7 +86,7 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
             end
             ToA = ToA * 1e9;
             ToA = ToA + normrnd(0, sigma_n_ns, [4, 1]);
-            ToA = round(ToA);
+%             ToA = round(ToA);
             rd = [];
             rd(1,1) = (ToA(4) - ToA(1))*config.c_ns;
             rd(2,1) = (ToA(4) - ToA(2))*config.c_ns;
