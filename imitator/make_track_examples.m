@@ -127,6 +127,7 @@ config = Config(); % конфиг содержит координаты пост
   measurements_params.period_sec = 0.1;
   measurements_params.n_periods = 0;
   measurements_params.strob_dur = 1000000;
+  measurements_params.s_ksi = 0;
   track = make_measurements_for_track(track, measurements_params, config);
   figure
   get_rd_from_poits(track.poits)
