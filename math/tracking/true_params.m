@@ -1,6 +1,4 @@
 function [X_true] = true_params(track, t)
-    
-
     X_true = [];
     
     for j = 1:length(t)
@@ -19,14 +17,8 @@ function [X_true] = true_params(track, t)
                 X_true(7,j) = track.crd(3,i-1) + dt * track.vel(3,i-1);
                 X_true(8,j) = track.vel(3,i-1) + dt * track.acc(3,i-1);
                 X_true(9,j) = track.acc(3,i-1);
-        
                 j = j + 1;
             end    
         end  
     end
-    
-  
-
-    
-    
 end
