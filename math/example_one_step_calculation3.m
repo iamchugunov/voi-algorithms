@@ -19,14 +19,14 @@ measurements_params.n_periods = 10;
 measurements_params.strob_dur = 0.12;
 % measurements_params.strob_dur = 1e8;
 track = make_measurements_for_track(track, measurements_params, config);
-params.mode = 0;
-params.percentage = [0 100 0];
-params.banned_post = 0;
+params.mode = 1;
+params.percentage = [0 1 0];
+params.banned_post = 1;
 [poits, res] = thinning_measurements(track.poits, params, config);
 %%
-N = 4;
+N = 3;
 show_posts2D
-show_hyperbols(poits(N).ToA(find(poits(N).ToA))*config.c_ns, config.posts(:,find(poits(N).ToA)), poits(N).true_crd(3), 1);
+show_hyperbols(poits(N).ToA(find(poits(N).ToA))*config.c_ns, config.posts(:,find(poits(N).ToA)), poits(N).true_crd(3), 3);
 show_track2D(track)
 if poits(N).count == 4
     poits(N) = crd_calc4a(poits(N),config);
