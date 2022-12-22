@@ -41,12 +41,19 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
         nums = find(t < ToT(k));
         crd = track.crd(:,nums(end));
         vel = track.vel(:,nums(end));
+        acc = track.acc(:,nums(end));
         dt = ToT(k) - t(nums(end));
         h_geo(k) = track.h_geo(nums(end));
         
-        SV(:,k) = [ crd(1,:) + vel(1,:) * dt; vel(1,:);
-            crd(2,:) + vel(2,:) * dt; vel(2,:);
-            crd(3,:) + vel(3,:) * dt; vel(3,:);];
+        SV(:,k) = [ crd(1,:) + vel(1,:) * dt + acc(1,:) * dt^2/2; 
+                vel(1,:) + acc(1,:) * dt;
+                acc(1,:);
+            crd(2,:) + vel(2,:) * dt + acc(2,:) * dt^2/2; 
+                vel(2,:) + acc(2,:) * dt;
+                acc(2,:);
+            crd(3,:) + vel(3,:) * dt + acc(3,:) * dt^2/2; 
+                vel(3,:) + acc(3,:) * dt;
+                acc(3,:);];
     end
     
 %     poits = [];
@@ -64,6 +71,7 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
         'true_ToT', [],...
         'true_crd', [],...
         'true_vel', [],...
+        'true_acc', [],...
         'h_geo', [],...
         'track_id', [],...
         'crd_valid', [],...
@@ -81,7 +89,7 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
             Ranges = [];
             ToA = [];
             for i = 1:length(posts)
-                Ranges(i,1) = norm(posts(:,i) - cur_sv([1 3 5]));
+                Ranges(i,1) = norm(posts(:,i) - cur_sv([1 4 7]));
                 ToA(i,1) = Ranges(i,1)/config.c + cur_tot - t_strob;
             end
             ToA = ToA * 1e9;
@@ -100,8 +108,9 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
             poit.rd_flag = ones(6,1);
             poit.count = 4;
             poit.true_ToT = cur_tot;
-            poit.true_crd = cur_sv([1 3 5]);
-            poit.true_vel = cur_sv([2 4 6]);
+            poit.true_crd = cur_sv([1 4 7]);
+            poit.true_vel = cur_sv([2 5 8]);
+            poit.true_acc = cur_sv([3 6 9]);
             poit.h_geo = h_geo(nms(j));
             poit.track_id = track.id;
             poit.crd_valid = 0;

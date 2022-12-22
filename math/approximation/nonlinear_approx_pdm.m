@@ -1,5 +1,5 @@
 function [res] = nonlinear_approx_pdm(poits, config, X)
-    addpath(genpath('math\approximation\pdm_functions'))
+    addpath(genpath('D:\Projects\voi-algorithms\math\approximation\rdm_functions'))
     t = [poits.Frame];
     t0 = t(1);
     t = t - t0;
@@ -96,6 +96,6 @@ function [res] = nonlinear_approx_pdm(poits, config, X)
             break;
         end
     end
-    rmpath(genpath('math\approximation\pdm_functions'))
+    rmpath(genpath('D:\Projects\voi-algorithms\math\approximation\rdm_functions'))
 end
 

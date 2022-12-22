@@ -18,14 +18,12 @@ function [KFilter] = PDKalmanFilter3D_T(track, config, X0, s_ksi, T)
     end
     KFilter.t = [poits.Frame];
     KFilter.X = X;
+    KFilter.crd = X([1 4 7],:);
+    KFilter.vel = X([2 5 8],:);
+    KFilter.acc = X([3 6 9],:);
+    KFilter.ToT = X(10,:);
     KFilter.Dx = Dx_hist;
     KFilter.Dx_last = Dx;
-    X_true = [];
-    X_true([1 4 7],:) = [track.poits.true_crd];
-    X_true([2 5 8],:) = [track.poits.true_vel];
-    X_true([3 6 9],:) = 0;
-    X_true(10,:) = [track.poits.true_ToT] * config.c;
-    KFilter.err = X - X_true;
     KFilter.discr = d;
 end
 

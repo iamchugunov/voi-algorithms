@@ -7,7 +7,7 @@ clear all
   traj_params.V = 200; % 
   traj_params.kurs = 120; % 
   traj_params.h = 10e3; % 
-  traj_params.time_interval = [0 30]; % 
+  traj_params.time_interval = [0 600]; % 
   traj_params.track_id = 0;
   track = make_geo_track(traj_params, config);
   % visual

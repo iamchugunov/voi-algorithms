@@ -3,3 +3,4 @@ grid on
 hold on
 xlabel('x, km')
 ylabel('y, km')
+daspect([1 1 1])
