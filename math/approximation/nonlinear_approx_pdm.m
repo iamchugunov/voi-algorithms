@@ -1,5 +1,5 @@
 function [res] = nonlinear_approx_pdm(poits, config, X)
-    addpath(genpath('D:\Projects\voi-algorithms\math\approximation\rdm_functions'))
+    addpath(genpath('D:\Projects\voi-algorithms\math\approximation\pdm_functions'))
     t = [poits.Frame];
     t0 = t(1);
     t = t - t0;
@@ -17,9 +17,12 @@ function [res] = nonlinear_approx_pdm(poits, config, X)
     iter_max = 20;
     iter = 0;
     
-    N = length(X);
+    
     res = [];
     
+%     T = X(end);
+%     X = X(1:end-1);
+    N = length(X);
     while 1
         dpdX = zeros(N, 1);
         dp2d2X = zeros(N, N);
@@ -68,9 +71,9 @@ function [res] = nonlinear_approx_pdm(poits, config, X)
                 case 5
                     [d, dd] = get_deriv_pdm0(x, i, y(:,i), config.posts, config);
                 case 8
-                    [d, dd] = get_deriv_rdm1(x, t(i), toa, posts);
+                    [d, dd] = get_deriv_pdm1(x, i, y(:,i), config.posts, config);
                 case 11
-                    [d, dd] = get_deriv_rdm2(x, t(i), toa, posts);
+                    [d, dd] = get_deriv_pdm2(x, t(i), toa, posts);
             end
             dpdX = dpdX + d;
             dp2d2X = dp2d2X + dd;
@@ -84,8 +87,9 @@ function [res] = nonlinear_approx_pdm(poits, config, X)
         res.iter = iter;
         res.X_hist(:,iter) = X;
         res.norm_nev(iter) = norm(X - X_prev);
-        [norm(X - X_prev) iter]
-        if norm(X - X_prev) < eps || iter > iter_max
+        [norm(X - X_prev) iter];
+%         if norm(X - X_prev) < eps || iter > iter_max
+        if norm(X(1:(end-2)) - X_prev(1:(end-2))) < eps || iter > iter_max    
             R = dp2d2X;
             D = inv(-R);
             R = diag(sqrt(abs(D)));
@@ -96,6 +100,6 @@ function [res] = nonlinear_approx_pdm(poits, config, X)
             break;
         end
     end
-    rmpath(genpath('D:\Projects\voi-algorithms\math\approximation\rdm_functions'))
+    rmpath(genpath('D:\Projects\voi-algorithms\math\approximation\pdm_functions'))
 end
 
