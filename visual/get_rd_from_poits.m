@@ -21,7 +21,7 @@ function [RD] = get_rd_from_poits(poits)
     rd6 = 0;
     
     t0 = poits(1).Frame;
-%     t0 = 0;
+    t0 = 0;
     for i = 1:length(poits)
         if poits(i).ToA(4) > 0 && poits(i).ToA(1) > 0
             k1 = k1 + 1;
@@ -67,6 +67,7 @@ function [RD] = get_rd_from_poits(poits)
     grid on
     xlabel('t, sec')
     ylabel('tdoa, m')
+    xlim([poits(1).Frame poits(end).Frame])
     
     RD = [];
     RD(1).rd = rd1*0.299792458000000;
