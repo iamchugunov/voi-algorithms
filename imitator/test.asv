@@ -67,16 +67,13 @@ if resCC3a.N == 2
 elseif resCC3a.N == 1
     res_True = resCC3a.x;
 end
-% shit
-%{ 
-if res_True(1) < 10e3  && res_True(2) < 10e3
+if res_True(1) < 20e3  && res_True(2) < 20e3
     if res_True(1) == resCC3a.x(1,1)
-        res_True = resCC3a.x(:,2);
+        res_True = 
     elseif res_True(2) == resCC3a.x(2,1)
-        res_True = resCC3a.x(:,1);
     end
 end
-%}
+
 
 
 

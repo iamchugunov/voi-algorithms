@@ -4,7 +4,7 @@ function [poit] = crd_calc3(poit, config)
     nms = find(pd);
     posts = config.posts(:,nms);
     toa = pd(nms);
-
+    
     mnk_params.epsilon = 0.001;
     mnk_params.max_iter = 20;
     mnk_params.X0 = [1000;1000;pd(1)];
