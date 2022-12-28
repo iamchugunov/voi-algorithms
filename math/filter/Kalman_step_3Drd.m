@@ -1,6 +1,6 @@
 function [X, Dx, discr] = Kalman_step_3Drd(y, X_prev, Dx, dt, sigma_n, D_ksi, config)
-    % шаг разностно-дальномерного фильтра калмана 
-    % вектор состояния X = [x vx ax y vy ay z vz az]
+    % TDoA Kalman
+    % X = [x vx ax y vy ay z vz az]
     nums = find(y ~= 0);
     posts = config.posts(:,nums);
     y = y(nums);

@@ -1,5 +1,5 @@
-%% формируем координаты постов
-R = 10e3; %% расстояние между постами
+%% posts
+R = 10e3; 
 posts = [];
 hp = 15;
 alphap = [30 150 270]*pi/180;
@@ -150,7 +150,7 @@ dop2Dtoa = get_dop_value(config, X(1), X(2), X(3), 'ToA2D');
 %     dop2DtdoaD.YDOP dop2Dtoa.YDOP;]
 [X mean(X3Dtoa(1:3,:)')' mean(X2Dtoa')']
 [mean(Xa1')' std(Xa1')'/sigma_n mean(Xa2')' std(Xa2')'/sigma_n]
-%% 2D распределение ГФ
+%% 2D DOP
 xdop = [];
 ydop = [];
 zdop = [];
@@ -192,7 +192,7 @@ for i = 1:length(X)
     end
 end
 show_dop(X,Y,hdop,[1 10 30 50 100 300 700 1000:1000:3000],[1 2000],config)
-%% 1D РАСПРЕДЕЛЕНИЕ ВДОЛЬ РАДИАЛЬНЫХ ЛИНИЙ 
+%% 1D among radius line
 alpha = (-90:30:90)*(pi)/180;
 figure(1)
 hold on
@@ -238,7 +238,7 @@ legend()
 figure(2)
 legend
 plot3(config.posts(1,:),config.posts(2,:),config.posts(3,:),'v')
-%% 1D распредеелние по радиусу
+%% 1D by radius
 R = 50e3;
 alpha = 0:0.01:2*pi;
 X = R * cos(alpha);
@@ -292,7 +292,7 @@ xlabel('θ, град')
 [max(zdop) - min(zdop) (max(zdop) - min(zdop))/mean(zdop)*100]
 [max(hdop2D) - min(hdop2D) (max(hdop2D) - min(hdop2D))/mean(hdop2D)*100]
 %%
-%% 1D зависимость ГФ от дальности
+%% 1D DOP by distance
 R = 20e3:1e3:250e3;
 alpha = 0:0.01:2*pi;
 h_geo = 10e3;
@@ -347,7 +347,7 @@ grid on
 % xlim([0 360])
 xlabel('R, км')
 %%
-%% 1D зависимость ГФ от высоты ИРИ
+%% 1D DOP by RRS hei
 R = 100e3;
 alpha = 0:0.01:2*pi;
 h_geo = 2e3:100:15e3;
@@ -404,7 +404,7 @@ xlabel('h, км')
 xlim([h_geo(1)/1000 h_geo(end)/1000])
 %%
 h_geo = 10e3;
-Rp = 3e3:0.5e3:15e3; %% расстояние между постами
+Rp = 3e3:0.5e3:15e3; 
 R = 150e3;
 hp = 15;
 alphap = [30 150 270]*pi/180;
@@ -469,7 +469,7 @@ grid on
 xlabel('R_{п}, км')
 xlim([Rp(1)/1000 Rp(end)/1000])
 %%
-%% 1D распредеелние по радиусу для троек
+%% 1D DOP by radius for thres
 R = 150e3;
 alpha = 0:0.01:2*pi;
 X = R * cos(alpha);
@@ -522,7 +522,7 @@ xlabel('θ, град')
 % [max(pdop) - min(pdop) (max(pdop) - min(pdop))/mean(pdop)*100]
 % [max(zdop) - min(zdop) (max(zdop) - min(zdop))/mean(zdop)*100]
 % [max(hdop2D) - min(hdop2D) (max(hdop2D) - min(hdop2D))/mean(hdop2D)*100]
-%% ДЛЯ СКВОРЦОВА
+%% for Scvortcov
 R = [30e3; 30e3; 30e3]; %% расстояние между постами
 posts = [];
 hp = 1000;

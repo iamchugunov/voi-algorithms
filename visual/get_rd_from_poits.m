@@ -21,7 +21,7 @@ function [RD] = get_rd_from_poits(poits)
     rd6 = 0;
     
     t0 = poits(1).Frame;
-%     t0 = 0;
+    t0 = 0;
     for i = 1:length(poits)
         if poits(i).ToA(4) > 0 && poits(i).ToA(1) > 0
             k1 = k1 + 1;
@@ -65,8 +65,9 @@ function [RD] = get_rd_from_poits(poits)
     plot(t6-t0,rd6*0.299792458000000,sym)
     legend('4-1','4-2','4-3','3-1','3-2','2-1')
     grid on
-    xlabel('t, сек')
-    ylabel('Разность хода, м')
+    xlabel('t, sec')
+    ylabel('tdoa, m')
+    xlim([poits(1).Frame poits(end).Frame])
     
     RD = [];
     RD(1).rd = rd1*0.299792458000000;

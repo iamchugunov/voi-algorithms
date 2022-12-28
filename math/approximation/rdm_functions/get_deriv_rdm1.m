@@ -175,8 +175,281 @@ function [d, dd] = get_deriv_rdm1(X, t, toa, posts)
         case 3
             rd1 = toa(3) - toa(1);
             rd2 = toa(3) - toa(2);
+            
+            s1 = 2 * rd1 - rd2;
+            s2 = -rd1 + 2 * rd2;
+            
+            d = zeros(6,1);
+            
+%             dx
+            A = dDdx(X,t,posts(:,3),posts(:,1))*s1+dDdx(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dx(X,t,posts(:,3),posts(:,1)) + dD2dx(X,t,posts(:,3),posts(:,2)) - dDDdx(X,t,posts(:,3),posts(:,1),posts(:,2));
+            d(1,1) = 1/3 * (A - B);
+%             dvx
+            A = dDdvx(X,t,posts(:,3),posts(:,1))*s1+dDdvx(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dvx(X,t,posts(:,3),posts(:,1)) + dD2dvx(X,t,posts(:,3),posts(:,2)) - dDDdvx(X,t,posts(:,3),posts(:,1),posts(:,2));
+            d(2,1) = 1/3 * (A - B);
+%             dy
+            A = dDdy(X,t,posts(:,3),posts(:,1))*s1+dDdy(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dy(X,t,posts(:,3),posts(:,1)) + dD2dy(X,t,posts(:,3),posts(:,2)) - dDDdy(X,t,posts(:,3),posts(:,1),posts(:,2));
+            d(3,1) = 1/3 * (A - B);
+%             vy
+            A = dDdvy(X,t,posts(:,3),posts(:,1))*s1+dDdvy(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dvy(X,t,posts(:,3),posts(:,1)) + dD2dvy(X,t,posts(:,3),posts(:,2)) - dDDdvy(X,t,posts(:,3),posts(:,1),posts(:,2));
+            d(4,1) = 1/3 * (A - B);
+%             z
+            A = dDdz(X,t,posts(:,3),posts(:,1))*s1+dDdz(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dz(X,t,posts(:,3),posts(:,1)) + dD2dz(X,t,posts(:,3),posts(:,2)) - dDDdz(X,t,posts(:,3),posts(:,1),posts(:,2));
+            d(5,1) = 1/3 * (A - B);
+%             vz
+            A = dDdvz(X,t,posts(:,3),posts(:,1))*s1+dDdvz(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dvz(X,t,posts(:,3),posts(:,1)) + dD2dvz(X,t,posts(:,3),posts(:,2)) - dDDdvz(X,t,posts(:,3),posts(:,1),posts(:,2));
+            d(6,1) = 1/3 * (A - B);
+            
+            dd = zeros(6,6);
+            
+%             dx
+% %             dx
+            A = dDdxdx(X,t,posts(:,3),posts(:,1))*s1+dDdxdx(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dxdx(X,t,posts(:,3),posts(:,1)) + dD2dxdx(X,t,posts(:,3),posts(:,2)) - dDDdxdx(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(1,1) = 1/3 * (A - B);
+% %             dvx
+            A = dDdxdvx(X,t,posts(:,3),posts(:,1))*s1+dDdxdvx(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dxdvx(X,t,posts(:,3),posts(:,1)) + dD2dxdvx(X,t,posts(:,3),posts(:,2)) - dDDdxdvx(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(2,1) = 1/3 * (A - B);
+            dd(1,2) = dd(2,1);
+% %             dy
+            A = dDdxdy(X,t,posts(:,3),posts(:,1))*s1+dDdxdy(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dxdy(X,t,posts(:,3),posts(:,1)) + dD2dxdy(X,t,posts(:,3),posts(:,2)) - dDDdxdy(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(3,1) = 1/3 * (A - B);
+            dd(1,3) = dd(3,1);
+% %             dvy
+            A = dDdxdvy(X,t,posts(:,3),posts(:,1))*s1+dDdxdvy(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dxdvy(X,t,posts(:,3),posts(:,1)) + dD2dxdvy(X,t,posts(:,3),posts(:,2)) - dDDdxdvy(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(4,1) = 1/3 * (A - B);
+            dd(1,4) = dd(4,1);
+% %             dz
+            A = dDdxdz(X,t,posts(:,3),posts(:,1))*s1+dDdxdz(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dxdz(X,t,posts(:,3),posts(:,1)) + dD2dxdz(X,t,posts(:,3),posts(:,2)) - dDDdxdz(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(5,1) = 1/3 * (A - B);
+            dd(1,5) = dd(5,1);
+% %             dvz
+            A = dDdxdvz(X,t,posts(:,3),posts(:,1))*s1+dDdxdvz(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dxdvz(X,t,posts(:,3),posts(:,1)) + dD2dxdvz(X,t,posts(:,3),posts(:,2)) - dDDdxdvz(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(6,1) = 1/3 * (A - B);
+            dd(1,6) = dd(6,1);        
+%             dvx
+% %             dvx
+            A = dDdvxdvx(X,t,posts(:,3),posts(:,1))*s1+dDdvxdvx(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dvxdvx(X,t,posts(:,3),posts(:,1)) + dD2dvxdvx(X,t,posts(:,3),posts(:,2)) - dDDdvxdvx(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(2,2) = 1/3 * (A - B);
+% %             dy
+            A = dDdydvx(X,t,posts(:,3),posts(:,1))*s1+dDdydvx(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dydvx(X,t,posts(:,3),posts(:,1)) + dD2dydvx(X,t,posts(:,3),posts(:,2)) - dDDdydvx(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(3,2) = 1/3 * (A - B);
+            dd(2,3) = dd(3,2);
+% %             dvy
+            A = dDdvxdvy(X,t,posts(:,3),posts(:,1))*s1+dDdvxdvy(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dvxdvy(X,t,posts(:,3),posts(:,1)) + dD2dvxdvy(X,t,posts(:,3),posts(:,2)) - dDDdvxdvy(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(4,2) = 1/3 * (A - B);
+            dd(2,4) = dd(4,2);           
+% %             dz
+            A = dDdzdvx(X,t,posts(:,3),posts(:,1))*s1+dDdzdvx(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dzdvx(X,t,posts(:,3),posts(:,1)) + dD2dzdvx(X,t,posts(:,3),posts(:,2)) - dDDdzdvx(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(5,2) = 1/3 * (A - B);
+            dd(2,5) = dd(5,2);
+% %             dvz
+            A = dDdvxdvz(X,t,posts(:,3),posts(:,1))*s1+dDdvxdvz(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dvxdvz(X,t,posts(:,3),posts(:,1)) + dD2dvxdvz(X,t,posts(:,3),posts(:,2)) - dDDdvxdvz(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(6,2) = 1/3 * (A - B);
+            dd(2,6) = dd(6,2);
+%             dy
+% %             dy
+            A = dDdydy(X,t,posts(:,3),posts(:,1))*s1+dDdydy(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dydy(X,t,posts(:,3),posts(:,1)) + dD2dydy(X,t,posts(:,3),posts(:,2)) - dDDdydy(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(3,3) = 1/3 * (A - B);
+% %             dvy
+            A = dDdydvy(X,t,posts(:,3),posts(:,1))*s1+dDdydvy(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dydvy(X,t,posts(:,3),posts(:,1)) + dD2dydvy(X,t,posts(:,3),posts(:,2)) - dDDdydvy(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(4,3) = 1/3 * (A - B);
+            dd(3,4) = dd(4,3);        
+% %             dz
+            A = dDdydz(X,t,posts(:,3),posts(:,1))*s1+dDdydz(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dydz(X,t,posts(:,3),posts(:,1)) + dD2dydz(X,t,posts(:,3),posts(:,2)) - dDDdydz(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(5,3) = 1/3 * (A - B);
+            dd(3,5) = dd(5,3);   
+% %             dvz
+            A = dDdydvz(X,t,posts(:,3),posts(:,1))*s1+dDdydvz(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dydvz(X,t,posts(:,3),posts(:,1)) + dD2dydvz(X,t,posts(:,3),posts(:,2)) - dDDdydvz(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(6,3) = 1/3 * (A - B);
+            dd(3,6) = dd(6,3); 
+%             dvy
+% %             dvy
+            A = dDdvydvy(X,t,posts(:,3),posts(:,1))*s1+dDdvydvy(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dvydvy(X,t,posts(:,3),posts(:,1)) + dD2dvydvy(X,t,posts(:,3),posts(:,2)) - dDDdvydvy(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(4,4) = 1/3 * (A - B);
+% %             dz
+            A = dDdzdvy(X,t,posts(:,3),posts(:,1))*s1+dDdzdvy(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dzdvy(X,t,posts(:,3),posts(:,1)) + dD2dzdvy(X,t,posts(:,3),posts(:,2)) - dDDdzdvy(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(5,4) = 1/3 * (A - B);
+            dd(4,5) = dd(5,4);            
+% %             dvz
+            A = dDdvydvz(X,t,posts(:,3),posts(:,1))*s1+dDdvydvz(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dvydvz(X,t,posts(:,3),posts(:,1)) + dD2dvydvz(X,t,posts(:,3),posts(:,2)) - dDDdvydvz(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(6,4) = 1/3 * (A - B);
+            dd(4,6) = dd(6,4);
+%             dz            
+% %             dz
+            A = dDdzdz(X,t,posts(:,3),posts(:,1))*s1+dDdzdz(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dzdz(X,t,posts(:,3),posts(:,1)) + dD2dzdz(X,t,posts(:,3),posts(:,2)) - dDDdzdz(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(5,5) = 1/3 * (A - B);
+% %             dvz
+            A = dDdzdvz(X,t,posts(:,3),posts(:,1))*s1+dDdzdvz(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dzdvz(X,t,posts(:,3),posts(:,1)) + dD2dzdvz(X,t,posts(:,3),posts(:,2)) - dDDdzdvz(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(6,5) = 1/3 * (A - B);
+            dd(5,6) = dd(6,5); 
+%             dvz            
+% %             dvz
+            A = dDdvzdvz(X,t,posts(:,3),posts(:,1))*s1+dDdvzdvz(X,t,posts(:,3),posts(:,2))*s2;
+            B = dD2dvzdvz(X,t,posts(:,3),posts(:,1)) + dD2dvzdvz(X,t,posts(:,3),posts(:,2)) - dDDdvzdvz(X,t,posts(:,3),posts(:,1),posts(:,2));
+            dd(6,6) = 1/3 * (A - B);
         case 2
             rd1 = toa(2) - toa(1);
+                        
+            d = zeros(6,1);
+            
+%             dx
+            A = dDdx(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dx(X,t,posts(:,2),posts(:,1));
+            d(1,1) = 1/2 * A - 1/4 * B;
+%             dvx
+            A = dDdvx(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dvx(X,t,posts(:,2),posts(:,1));
+            d(2,1) = 1/2 * A - 1/4 * B;
+%             dy
+            A = dDdy(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dy(X,t,posts(:,2),posts(:,1));
+            d(3,1) = 1/2 * A - 1/4 * B;
+%             vy
+            A = dDdvy(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dvy(X,t,posts(:,2),posts(:,1));
+            d(4,1) = 1/2 * A - 1/4 * B;
+%             z
+            A = dDdz(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dz(X,t,posts(:,2),posts(:,1));
+            d(5,1) = 1/2 * A - 1/4 * B;
+%             vz
+            A = dDdvz(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dvz(X,t,posts(:,2),posts(:,1));
+            d(6,1) = 1/2 * A - 1/4 * B;
+            
+            dd = zeros(6,6);
+            
+%             dx
+% %             dx
+            A = dDdxdx(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dxdx(X,t,posts(:,2),posts(:,1));
+            dd(1,1) = 1/2 * A - 1/4 * B;
+% %             dvx
+            A = dDdxdvx(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dxdvx(X,t,posts(:,2),posts(:,1));
+            dd(2,1) = 1/2 * A - 1/4 * B;
+            dd(1,2) = dd(2,1);
+% %             dy
+            A = dDdxdy(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dxdy(X,t,posts(:,2),posts(:,1));
+            dd(3,1) = 1/2 * A - 1/4 * B;
+            dd(1,3) = dd(3,1);
+% %             dvy
+            A = dDdxdvy(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dxdvy(X,t,posts(:,2),posts(:,1));
+            dd(4,1) = 1/2 * A - 1/4 * B;
+            dd(1,4) = dd(4,1);
+% %             dz
+            A = dDdxdz(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dxdz(X,t,posts(:,2),posts(:,1));
+            dd(5,1) = 1/2 * A - 1/4 * B;
+            dd(1,5) = dd(5,1);
+% %             dvz
+            A = dDdxdvz(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dxdvz(X,t,posts(:,2),posts(:,1));
+            dd(6,1) = 1/2 * A - 1/4 * B;
+            dd(1,6) = dd(6,1);         
+%             dvx
+% %             dvx
+            A = dDdvxdvx(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dvxdvx(X,t,posts(:,2),posts(:,1));
+            dd(2,2) = 1/2 * A - 1/4 * B;
+% %             dy
+            A = dDdydvx(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dydvx(X,t,posts(:,2),posts(:,1));
+            dd(3,2) = 1/2 * A - 1/4 * B;
+            dd(2,3) = dd(3,2);
+% %             dvy
+            A = dDdvxdvy(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dvxdvy(X,t,posts(:,2),posts(:,1));
+            dd(4,2) = 1/2 * A - 1/4 * B;
+            dd(2,4) = dd(4,2);               
+% %             dz
+            A = dDdzdvx(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dzdvx(X,t,posts(:,2),posts(:,1));
+            dd(5,2) = 1/2 * A - 1/4 * B;
+            dd(2,5) = dd(5,2);
+% %             dvz
+            A = dDdvxdvz(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dvxdvz(X,t,posts(:,2),posts(:,1));
+            dd(6,2) = 1/2 * A - 1/4 * B;
+            dd(2,6) = dd(6,2);           
+%             dy
+% %             dy
+            A = dDdydy(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dydy(X,t,posts(:,2),posts(:,1));
+            dd(3,3) = 1/2 * A - 1/4 * B;
+% %             dvy
+            A = dDdydvy(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dydvy(X,t,posts(:,2),posts(:,1));
+            dd(4,3) = 1/2 * A - 1/4 * B;
+            dd(3,4) = dd(4,3);          
+% %             dz
+            A = dDdydz(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dydz(X,t,posts(:,2),posts(:,1));
+            dd(5,3) = 1/2 * A - 1/4 * B;
+            dd(3,5) = dd(5,3);   
+% %             dvz
+            A = dDdydvz(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dydvz(X,t,posts(:,2),posts(:,1));
+            dd(6,3) = 1/2 * A - 1/4 * B;
+            dd(3,6) = dd(6,3); 
+%             dvy
+% %             dvy
+            A = dDdvydvy(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dvydvy(X,t,posts(:,2),posts(:,1));
+            dd(4,4) = 1/2 * A - 1/4 * B;
+% %             dz
+            A = dDdzdvy(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dzdvy(X,t,posts(:,2),posts(:,1));
+            dd(5,4) = 1/2 * A - 1/4 * B;
+            dd(4,5) = dd(5,4);            
+% %             dvz
+            A = dDdvydvz(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dvydvz(X,t,posts(:,2),posts(:,1));
+            dd(6,4) = 1/2 * A - 1/4 * B;
+            dd(4,6) = dd(6,4);
+%             dz            
+% %             dz
+            A = dDdzdz(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dzdz(X,t,posts(:,2),posts(:,1));
+            dd(5,5) = 1/2 * A - 1/4 * B;
+% %             dvz
+            A = dDdzdvz(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dzdvz(X,t,posts(:,2),posts(:,1));
+            dd(6,5) = 1/2 * A - 1/4 * B;
+            dd(5,6) = dd(6,5);   
+%             dvz            
+% %             dvz
+            A = dDdvzdvz(X,t,posts(:,2),posts(:,1))*rd1;
+            B = dD2dvzdvz(X,t,posts(:,2),posts(:,1));
+            dd(6,6) = 1/2 * A - 1/4 * B;
     end
 end
 
