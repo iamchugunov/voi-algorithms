@@ -1,9 +1,9 @@
-function [KFilter] = RDKalmanFilter3D(track, config, X0, s_ksi)
+function [KFilter] = RDKalmanFilter3D(track, config, X0, Dx0, s_ksi)
     poits = track.poits;
     s_n = config.c_ns * config.sigma_n_ns;
     D_ksi = eye(3) * s_ksi^2;
     X_prev = [X0(1); X0(2); 0; X0(3); X0(4); 0; X0(5); X0(6);0];
-    Dx = eye(9);
+    Dx = Dx0;
     Dx_hist(:,1) = diag(Dx);
     X = X_prev;
     for i = 2:length(poits)
