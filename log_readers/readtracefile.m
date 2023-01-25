@@ -37,6 +37,10 @@ warning off
     poit.filterid = [];
     poit.filteridhex = '';
     poit.kursk = [];
+    poit.crd_valid = 0;
+    poit.est_crd = 0;
+    poit.est_ToT = 0;
+    poit.res = [];
 %     
     fgetl(f);
 %     
@@ -100,6 +104,10 @@ while feof(f)==0
             poit.filterid = str2num(S{15,1});
             poit.filteridhex = dec2hex(poit.filterid);
             poit.kursk = [];
+            poit.crd_valid = 0;
+            poit.est_crd = 0;
+            poit.est_ToT = 0;
+            poit.res = [];
             
             k_poits = k_poits + 1;
             

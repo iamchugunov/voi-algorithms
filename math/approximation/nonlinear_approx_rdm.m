@@ -72,7 +72,7 @@ function [res] = nonlinear_approx_rdm(poits, config, X)
         res.iter = iter;
         res.X_hist(:,iter) = X;
         res.norm_nev(iter) = norm(X - X_prev);
-        %         [norm(X - X_prev) iter]
+                [norm(X - X_prev) iter]
         if norm(X - X_prev) < eps || iter > iter_max || (iter > 2 && norm(X - X_prev) > 1e6)
             R = dp2d2X;
             D = inv(-R);

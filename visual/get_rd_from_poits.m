@@ -57,17 +57,19 @@ function [RD] = get_rd_from_poits(poits)
 %     figure
     hold on
     sym = '.';
-    plot(t1-t0,rd1*0.299792458000000,sym)
-    plot(t2-t0,rd2*0.299792458000000,sym)
-    plot(t3-t0,rd3*0.299792458000000,sym)
-    plot(t4-t0,rd4*0.299792458000000,sym)
-    plot(t5-t0,rd5*0.299792458000000,sym)
-    plot(t6-t0,rd6*0.299792458000000,sym)
+    plot(t1-t0,rd1*0.299792458000000/1000,sym)
+    plot(t2-t0,rd2*0.299792458000000/1000,sym)
+    plot(t3-t0,rd3*0.299792458000000/1000,sym)
+    plot(t4-t0,rd4*0.299792458000000/1000,sym)
+    plot(t5-t0,rd5*0.299792458000000/1000,sym)
+    plot(t6-t0,rd6*0.299792458000000/1000,sym)
     legend('4-1','4-2','4-3','3-1','3-2','2-1')
     grid on
-    xlabel('t, sec')
-    ylabel('tdoa, m')
+    xlabel('t, сек')
+    ylabel('Разности дальностей, км')
     xlim([poits(1).Frame poits(end).Frame])
+    set(gca,'FontName','Times')
+    set(gca,'FontSize',14)
     
     RD = [];
     RD(1).rd = rd1*0.299792458000000;
