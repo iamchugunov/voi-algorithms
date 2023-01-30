@@ -27,8 +27,6 @@ function [codes] = AC_analysys(traj)
             nums = find([cur_poits.Smode] < 0);
             cur_poits = cur_poits(nums);
             
-            codes = [];
-            
             codes = get_codes_from_poits(cur_poits);
             
             if length(codes) == 0
