@@ -6,19 +6,19 @@ function [RD] = get_rd_from_poits(poits)
     k5 = 0;
     k6 = 0;
     
-    t1 = [];
-    t2 = [];
-    t3 = [];
-    t4 = [];
-    t5 = [];
-    t6 = [];
+    t1 = 0;
+    t2 = 0;
+    t3 = 0;
+    t4 = 0;
+    t5 = 0;
+    t6 = 0;
     
-    rd1 = [];
-    rd2 = [];
-    rd3 = [];
-    rd4 = [];
-    rd5 = [];
-    rd6 = [];
+    rd1 = 0;
+    rd2 = 0;
+    rd3 = 0;
+    rd4 = 0;
+    rd5 = 0;
+    rd6 = 0;
     
     t0 = poits(1).Frame;
 %     t0 = 0;
@@ -65,8 +65,8 @@ function [RD] = get_rd_from_poits(poits)
     plot(t6-t0,rd6*0.299792458000000,sym)
     legend('4-1','4-2','4-3','3-1','3-2','2-1')
     grid on
-    xlabel('t, сек')
-    ylabel('Разность хода, м')
+    xlabel('t, sec')
+    ylabel('tdoa, m')
     
     RD = [];
     RD(1).rd = rd1*0.299792458000000;

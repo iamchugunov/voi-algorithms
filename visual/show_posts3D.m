@@ -1,6 +1,6 @@
 plot3(config.posts(1,:)/1000,config.posts(2,:)/1000,config.posts(3,:)/1000,'vk','linewidth',2)
 grid on
 hold on
-xlabel('x, ÐºÐ¼')
-ylabel('y, ÐºÐ¼')
-zlabel('z, ÐºÐ¼')
+xlabel('x, êì')
+ylabel('y, êì')
+zlabel('z, êì')

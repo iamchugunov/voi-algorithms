@@ -1,5 +1,5 @@
 function [dop] = show_track_dop(track)
-    % строит график и возвращает значение ГФ от времени
+    % dop by time
     dop.t = track.t;
     dop.XDOP = [track.dop.XDOP];
     dop.YDOP = [track.dop.YDOP];
@@ -19,8 +19,8 @@ function [dop] = show_track_dop(track)
     plot(dop.t,dop.PDOP,'linewidth',2)
     plot(dop.t,dop.DOP,'linewidth',2)
     legend('XDOP','YDOP','ZDOP','HDOP','TDOP','PDOP','DOP')
-    xlabel('t, сек')
-    title_str = ['ГФ для трассы ' num2str(track.id)];
+    xlabel('t, sec')
+    title_str = ['DOP for track' num2str(track.id)];
     title(title_str)
 end
 
