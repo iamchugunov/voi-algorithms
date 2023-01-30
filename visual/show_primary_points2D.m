@@ -11,6 +11,6 @@ function [] = show_primary_points2D(poits)
     end
     X = X(:,1:k);
     t = t(1:k);
-    plot(X(1,:)/1000,X(2,:)/1000,'.')
+    plot(X(1,:)/1000,X(2,:)/1000,'xr')
 end
 

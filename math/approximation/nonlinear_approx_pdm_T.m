@@ -1,4 +1,4 @@
-function [res] = nonlinear_approx_pdm(poits, config, X)
+function [res] = nonlinear_approx_pdm_T(poits, config, X, T)
     addpath(genpath('D:\Projects\voi-algorithms\math\approximation\pdm_functions'))
     t = [poits.Frame];
     t0 = t(1);
@@ -27,7 +27,7 @@ function [res] = nonlinear_approx_pdm(poits, config, X)
         dpdX = zeros(N, 1);
         dp2d2X = zeros(N, N);
         switch N
-            case 5
+            case 4
                 x.x = X(1,1);
                 x.vx = 0;
                 x.ax = 0;
@@ -38,8 +38,8 @@ function [res] = nonlinear_approx_pdm(poits, config, X)
                 x.vz = 0;
                 x.az = 0;
                 x.T = X(4,1);
-                x.dt = X(5,1);
-            case 8
+                x.dt = T * config.c;
+            case 7
                 x.x = X(1,1);
                 x.vx = X(2,1);
                 x.ax = 0;
@@ -50,8 +50,8 @@ function [res] = nonlinear_approx_pdm(poits, config, X)
                 x.vz = X(6,1);
                 x.az = 0;
                 x.T = X(7,1);
-                x.dt = X(8,1);
-            case 11
+                x.dt = T * config.c;
+            case 10
                 x.x = X(1,1);
                 x.vx = X(2,1);
                 x.ax = X(3,1);
@@ -62,18 +62,18 @@ function [res] = nonlinear_approx_pdm(poits, config, X)
                 x.vz = X(8,1);
                 x.az = X(9,1);
                 x.T = X(10,1);
-                x.dt = X(11,1);
+                x.dt = T * config.c;
         end
         
         for i = 1:length(t)
             
             switch N
-                case 5
-                    [d, dd] = get_deriv_pdm0(x, i, y(:,i), config.posts, config);
-                case 8
-                    [d, dd] = get_deriv_pdm1(x, i, y(:,i), config.posts, config);
-                case 11
-                    [d, dd] = get_deriv_pdm2(x, t(i), toa, posts);
+                case 4
+                    [d, dd] = get_deriv_pdm_T0(x, i, y(:,i), config.posts, config);
+                case 7
+                    [d, dd] = get_deriv_pdm_T1(x, i, y(:,i), config.posts, config);
+                case 10
+                    [d, dd] = get_deriv_pdm_T2(x, t(i), toa, posts);
             end
             dpdX = dpdX + d;
             dp2d2X = dp2d2X + dd;
@@ -93,7 +93,7 @@ function [res] = nonlinear_approx_pdm(poits, config, X)
             R = dp2d2X;
             D = inv(-R);
             R = diag(sqrt(abs(D)));
-            X(end-1:end) = X(end-1:end)/config.c;
+            X(end) = X(end)/config.c;
             res.X = X;
             res.dp2d2X = dp2d2X;
             res.R = R;
