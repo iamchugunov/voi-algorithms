@@ -8,32 +8,18 @@ function [X, Dx, discr] = Kalman_step_3Drd_group(y, X_prev, Dx, dt, sigma_n, D_k
 
     % D_n = eye(N) * sigma_n^2;
 
+    H = zeros(N-1,N);
+    H(:,end) = 1;
+    for i = 1:N-1
+        H(i,i) = -1;
+    end
+
     switch N
         case 4
-            hdnht = zeros(3,3);
-            for i = 1:3
-                for j = 1:3
-                    if i == j
-                        hdnht(i,j) = 2;
-                    else
-                        hdnht(i,j) = 1;
-                    end       
-                end
-            end
-            HDnHT = sigma_n^2 * hdnht ;
+            HDnHT = sigma_n^2 * H * H';
             HDnHTrev = inv(HDnHT);
         case 3
-            hdnht = zeros(2,2);
-            for i = 1:2
-                for j = 1:2
-                    if i == j
-                        hdnht(i,j) = 2;
-                    else
-                        hdnht(i,j) = 1;
-                    end       
-                end
-            end
-            HDnHT = sigma_n^2 * hdnht ;
+            HDnHT = sigma_n^2 * H * H';
             HDnHTrev = inv(HDnHT);
         case 2
             HDnHT = 2 * sigma_n^2;
@@ -52,11 +38,7 @@ function [X, Dx, discr] = Kalman_step_3Drd_group(y, X_prev, Dx, dt, sigma_n, D_k
     G(6,2) = dt;
     G(9,3) = dt;
 
-    H = zeros(N-1,N);
-    H(:,end) = 1;
-    for i = 1:N-1
-        H(i,i) = -1;
-    end
+   
 
     X_ext = F * X_prev;
     D_x_ext = F * Dx * F' + G * D_ksi * G';
