@@ -14,6 +14,8 @@ close all
   measurements_params.period_sec = 0.1;
   measurements_params.n_periods = 0;
   measurements_params.strob_dur = 0.12;
+  measurements_params.s_ksi = 0;
+
   track = make_measurements_for_track(track, measurements_params, config);
   %%
   sigma_ksi = 1;

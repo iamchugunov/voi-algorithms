@@ -3,16 +3,16 @@ function [config] = Config()
     config.c = 299792458;
     config.c_ns = config.c/1e9;
 %% stations positions
-%     R = 10e3; %% distance (radius)
-%     posts = [];
-%     hp = 15;
-%     alphap = [30 150 270]*pi/180;
-%     for i = 1:3
-%         posts(:,i) = [R * cos(alphap(i)); R * sin(alphap(i)); hp + normrnd(0, 5)];
-%     end
-%     posts(:,4) = [0;0;hp];
-% %     posts = [-5e3 -5e3 5e3 5e3; -5e3 5e3 -5e3 5e3; 100 100 100 100];
-%     config.posts = posts;
+    R = 10e3; %% distance (radius)
+    posts = [];
+    hp = 15;
+    alphap = [30 150 270]*pi/180;
+    for i = 1:3
+        posts(:,i) = [R * cos(alphap(i)); R * sin(alphap(i)); hp + normrnd(0, 5)];
+    end
+    posts(:,4) = [0;0;hp];
+%     posts = [-5e3 -5e3 5e3 5e3; -5e3 5e3 -5e3 5e3; 100 100 100 100];
+    config.posts = posts;
     
 %%
 %         posts parameters
@@ -86,11 +86,11 @@ function [config] = Config()
 %     PostsBLH(:,4) = [35.551633; 51.446939; 1045.8];
 
                             %tehran 28-09-2022
-    PostsBLH(:,1) = [35.430876; 51.295711; 1204.6];
-    PostsBLH(:,2) = [35.564474; 51.544826; 1087.7];
-    PostsBLH(:,3) = [35.747985; 51.355318; 1458.9];
-    PostsBLH(:,4) = [35.551633; 51.446950; 1043.1];
-    
+%     PostsBLH(:,1) = [35.430876; 51.295711; 1204.6];
+%     PostsBLH(:,2) = [35.564474; 51.544826; 1087.7];
+%     PostsBLH(:,3) = [35.747985; 51.355318; 1458.9];
+%     PostsBLH(:,4) = [35.551633; 51.446950; 1043.1];
+%     
     % egypt 2022
 %     PostsBLH(:,1) = [30.097503; 30.962798; 197.1];
 %     PostsBLH(:,2) = [30.032244; 30.852901; 156.6];
@@ -98,14 +98,14 @@ function [config] = Config()
 %     PostsBLH(:,4) = [30.095271; 30.888044; 181.9];
 % 
 %     
-    BLHref = PostsBLH(:,4);
-    BLHref(3) = 0;
-    for i = 1:size(PostsBLH,2)
-        [PostsENU(1,i), PostsENU(2,i), PostsENU(3,i)] = geodetic2enu(PostsBLH(1,i),PostsBLH(2,i),PostsBLH(3,i),BLHref(1),BLHref(2),BLHref(3),wgs84Ellipsoid);
-    end
-    config.BLHref = BLHref;
-    config.PostsBLH = PostsBLH;
-    config.posts = PostsENU;
+%     BLHref = PostsBLH(:,4);
+%     BLHref(3) = 0;
+%     for i = 1:size(PostsBLH,2)
+%         [PostsENU(1,i), PostsENU(2,i), PostsENU(3,i)] = geodetic2enu(PostsBLH(1,i),PostsBLH(2,i),PostsBLH(3,i),BLHref(1),BLHref(2),BLHref(3),wgs84Ellipsoid);
+%     end
+%     config.BLHref = BLHref;
+%     config.PostsBLH = PostsBLH;
+%     config.posts = PostsENU;
 %% central point (latitude longitude)
     BLHref = [30.097498; 30.962812; 0]; % Cairo
 
