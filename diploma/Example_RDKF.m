@@ -4,9 +4,9 @@ close all
 config = Config();
 traj_params.X0 = [50e3; -50e3]; 
 traj_params.V = 200; 
-traj_params.kurs = 120; 
+traj_params.kurs = 90; 
 traj_params.h = 10e3; 
-traj_params.time_interval = [0 31]; 
+traj_params.time_interval = [0 35]; 
 
 traj_params.track_id = 0;
 
@@ -29,9 +29,9 @@ track = make_measurements_for_track(track, measurements_params, config);
 % params.banned_post = 2;
 % [track.poits, res] = thinning_measurements(track.poits, params, config);
 %%
-X0 = [track.crd(1,1);track.vel(1,1);0;
-      track.crd(2,2);track.vel(2,2);0;
-      track.crd(3,3);track.vel(3,3);0;];
+X0 = [track.crd(1,1);track.vel(1,1);
+      track.crd(2,2);track.vel(2,2);
+      track.crd(3,3);track.vel(3,3);];
 sigma_Dx0 = 10;
 Dx0 = sigma_Dx0*eye(9,9); 
 s_ksi = 1;
@@ -39,9 +39,9 @@ s_ksi = 1;
 paramsT.T_nak = 30;
 paramsT.T = 5;
 
-Filter = RDKalmanFilter_Accumulation(track, config, s_ksi, X0, Dx0, paramsT);
+Filter = RDKF_Accum(track, config, s_ksi, X0, Dx0, paramsT);
 
 show_posts2D
 show_track2D(track)
-% hold on
-% plot(Filter.crd(1,:)/1000,Filter.crd(2,:)/1000, "r-")
+hold on
+plot(Filter.crd(1,:)/1000,Filter.crd(2,:)/1000, "r-")

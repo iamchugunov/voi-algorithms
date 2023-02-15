@@ -1,4 +1,6 @@
-function [KFilter] = RDKalmanFilter_Accumulation(track, config, s_ksi, X0, Dx0, params_disk)
+function [KFilter] = RDKF_Accum(track, config, s_ksi, ...
+    X0, Dx0, params_disk)
+
     poits = track.poits;
     s_n = config.c_ns * config.sigma_n_ns;
     D_ksi = eye(3) * s_ksi^2;
@@ -11,6 +13,7 @@ function [KFilter] = RDKalmanFilter_Accumulation(track, config, s_ksi, X0, Dx0, 
   
     t_res_last = poits(1).Frame;
     k = 0;
+    X(:,1) = X_prev;
     for i = 1:length(poits)
         if poits(i).Frame - t_res_last > T
             k = k + 1;
@@ -24,13 +27,16 @@ function [KFilter] = RDKalmanFilter_Accumulation(track, config, s_ksi, X0, Dx0, 
                 end
             end
             t(k) = t_res_last;
-            [X, Dx, d] = RDKalmanFilter_Accumulation_Calc(current_poits, X_prev, Dx, s_n, D_ksi, config, T);
-            
-            
+            %%%%%%%%
+            [X, d, Dx_hist, Dx] = RDKF_Accum_Calc(current_poits, ...
+                X_prev, Dx, s_n, D_ksi, config, T);
+            %%%%%%%%
+%              Xnak(:,k) = X;
         end
+        
     end
 
-    KFilter.X = X;
+    KFilter.X = Xf;
     KFilter.crd = X([1 4 7],:);
     KFilter.vel = X([2 5 8],:);
     KFilter.acc = X([3 6 9],:);
