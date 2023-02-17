@@ -43,30 +43,31 @@ function [codes] = AC_analysys(traj)
             
             
             fprintf(['\n' num2str(poits(n1).Frame - t0) '-' num2str(poits(n2).Frame - t0) ' sec\n'] );
-            for kk = 1:2
-                
-                for i = 1:length(codes)
-                    if (kk == 1) && codes(i).hei ~= -1000
-                        continue
-                    end
-                    if (kk == 2) && codes(i).hei == -1000
-                        continue
-                    end
-                    rd = codes(i).rd;
-                    RD = [];
-                    for j = 1:6
-                        nms = find(rd(j,:) ~= 0);
-                        if isempty(nms)
-                            RD(j,:) = [0 0];
-                        else
-                            RD(j,:) = [mean(rd(j,nms)) std(rd(j,nms))];
-                        end
-                    end
-    %                 fprintf([dec2hex(codes(i).code,4) '\t' num2str(codes(i).hei) '\t' num2str(codes(i).count) '\n']);
-                    fprintf('%3d %4X\t%6.0f\t%5d\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\n',i, codes(i).code,codes(i).hei,codes(i).count,RD(1,1),RD(1,2),RD(2,1),RD(2,2),RD(3,1),RD(3,2),RD(4,1),RD(4,2),RD(5,1),RD(5,2),RD(6,1),RD(6,2))
-    %                 fprintf([num2str(codes(i).code) '\t' dec2hex(codes(i).code,4) '\t' dec2bin(codes(i).code,16) '\t' num2str(codes(i).hei) '\t' num2str(codes(i).count) '\n']);
-                end
-            end
+            [codes_squawk, codes_hei] = codes_analysis(codes);
+%             for kk = 1:2
+%                 
+%                 for i = 1:length(codes)
+%                     if (kk == 1) && codes(i).hei ~= -1000
+%                         continue
+%                     end
+%                     if (kk == 2) && codes(i).hei == -1000
+%                         continue
+%                     end
+%                     rd = codes(i).rd;
+%                     RD = [];
+%                     for j = 1:6
+%                         nms = find(rd(j,:) ~= 0);
+%                         if isempty(nms)
+%                             RD(j,:) = [0 0];
+%                         else
+%                             RD(j,:) = [mean(rd(j,nms)) std(rd(j,nms))];
+%                         end
+%                     end
+%     %                 fprintf([dec2hex(codes(i).code,4) '\t' num2str(codes(i).hei) '\t' num2str(codes(i).count) '\n']);
+%                     fprintf('%3d %4X\t%6.0f\t%5d\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\n',i, codes(i).code,codes(i).hei,codes(i).count,RD(1,1),RD(1,2),RD(2,1),RD(2,2),RD(3,1),RD(3,2),RD(4,1),RD(4,2),RD(5,1),RD(5,2),RD(6,1),RD(6,2))
+%     %                 fprintf([num2str(codes(i).code) '\t' dec2hex(codes(i).code,4) '\t' dec2bin(codes(i).code,16) '\t' num2str(codes(i).hei) '\t' num2str(codes(i).count) '\n']);
+%                 end
+%             end
             
             n2_last = n2;
             n2 = n2+1;

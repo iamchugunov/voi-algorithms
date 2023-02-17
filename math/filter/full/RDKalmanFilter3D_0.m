@@ -10,7 +10,7 @@ function [KFilter] = RDKalmanFilter3D_0(track, config, X0, Dx0, s_ksi)
         dt = poits(i).Frame - poits(i-1).Frame;
         [X(:,i), Dx, discr] = Kalman_step_3Drd_0(poits(i).ToA*config.c_ns, X(:,i-1), Dx, dt, s_n, D_ksi, config); 
         Dx_hist(:,i) = diag(Dx);
-        d(:,i) = discr;
+%         d(:,i) = discr;
     end
     KFilter.t = [poits.Frame];
     KFilter.X = X;
@@ -19,6 +19,7 @@ function [KFilter] = RDKalmanFilter3D_0(track, config, X0, Dx0, s_ksi)
     KFilter.acc = zeros(3,length(KFilter.t));
     KFilter.Dx = Dx_hist;
     KFilter.Dx_last = Dx;
-    KFilter.discr = d;
+%     KFilter.discr = d;
+    KFilter.ToT = [];
 end
 

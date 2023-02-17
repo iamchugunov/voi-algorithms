@@ -5,7 +5,7 @@ traj_params.X0 = [150e3; -150e3];
 traj_params.V = 200;
 traj_params.kurs = 130;
 traj_params.h = 10e3;
-traj_params.time_interval = [0 3600];
+traj_params.time_interval = [0 3000];
 traj_params.track_id = 0;
 traj_params.maneurs(1) = struct('t0',1200,'t',2000,'acc',0,'omega',0.3);
 % traj_params.maneurs(2) = struct('t0',400,'t',450,'acc',0,'omega',0.6);
@@ -47,33 +47,38 @@ show_primary_points3D(poits)
 % end
 % show_primary_points3D(poits)
 %%
+close all
 poits = track.poits;
 params.mode = 1;
 params.percentage = [0 100 0];
-params.banned_post = 4;
+params.banned_post = 3;
 % [poits, res] = thinning_measurements(poits, params, config);
 track.poits = poits;
+
 sigma_ksi = 10;
+h_geo = 10000;
   X0 = [track.poits(1).true_crd(1,1); 
       track.poits(1).true_vel(1,1); 
       track.poits(1).true_crd(2,1); 
       track.poits(1).true_vel(2,1); 
       track.poits(1).true_crd(3,1); 
       track.poits(1).true_vel(3,1);];
+  
   Dx0 = eye(6);
-  h_geo = 8000;
+  
 [KFilter1] = RDKalmanFilter2D_hgeo(track, config, X0, Dx0, sigma_ksi, h_geo);
-sigma_h = 10000;
-X0 = [track.poits(1).true_crd(1,1);
-    track.poits(1).true_vel(1,1);
-    track.poits(1).true_crd(2,1);
-    track.poits(1).true_vel(2,1);
-    track.poits(1).true_crd(3,1);
-    track.poits(1).true_vel(3,1);];
+sigma_h = 0.1;
 Dx0 = eye(9);
-h_geo = 10000;
 [KFilter2] = RDKalmanFilter3D_hgeo(track, config, X0, Dx0, sigma_ksi, h_geo, sigma_h);
+
+Dx0 = eye(9);
+[KFilter3] = RDKalmanFilter3D(track, config, X0, Dx0, sigma_ksi);
 show_posts2D
 show_track2D(track)
-plot(KFilter1.crd(1,:)/1000,KFilter1.crd(2,:)/1000,'.-')
-plot(KFilter2.crd(1,:)/1000,KFilter2.crd(2,:)/1000,'.-')
+plot(KFilter1.crd(1,:)/1000,KFilter1.crd(2,:)/1000,'r.-')
+plot(KFilter2.crd(1,:)/1000,KFilter2.crd(2,:)/1000,'g.-')
+plot(KFilter3.crd(1,:)/1000,KFilter3.crd(2,:)/1000,'b.-')
+
+%   [err] = err_calc(track, KFilter1,config);
+  [err] = err_calc(track, KFilter2,config);
+  [err] = err_calc(track, KFilter3,config);

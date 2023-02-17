@@ -80,5 +80,7 @@ function [err] = err_calc(track, res, config)
     ylabel('V_z, m/s')
     set(gca,'FontSize',14)
     
+    set(gcf, 'Position', get(0, 'Screensize'));
+    
 end
 

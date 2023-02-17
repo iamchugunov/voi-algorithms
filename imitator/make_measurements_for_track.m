@@ -15,25 +15,45 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
 %         ToT(k) = current_t + period_sec * ( 1 + randi([0 n_periods]) );
 %         current_t = ToT(k);
 %     end
+
+
+%     k = 1;
+%     ToT(k) = current_t + period_sec;
+%     drift(k) = 0;
+%     while current_t < t(end)
+%         k = k + 1;
+%         % WE CAN CHOOSE MODEL OF DRIFT
+%         % 1. mark 1
+% %         drift(k) = drift(k - 1) + period_sec * normrnd(0, s_ksi);
+%         drift(k) = drift(k - 1) + normrnd(0, s_ksi);
+%         % 1. mark 2
+%         %     drift(i) = drift(i-1) + T * drift_t(i-1);
+%         %     drift_t(i) = drift_t(i-1) + T * normrnd(0, s_ksi);
+%         % 3. linear
+%         %     drift(i) = drift(i-1) + T * shift_v;
+%         % 4. const
+%         %     drift(i) = shift_const;
+%         % 5. WGN
+%         %     drift(i) = normrnd(0, s_ksi);
+%         
+% %         ToT(k) = ToT(k-1) + (1 - drift(k-1))*period_sec;
+%         ToT(k) = ToT(k-1) + period_sec + drift(k-1);
+%         current_t = ToT(k);
+%     end
+    
     k = 1;
     ToT(k) = current_t + period_sec;
-    drift(k) = 0;
+    delta = [0;0];
+    t_i(1) = ToT(1) + delta(1);
     while current_t < t(end)
         k = k + 1;
-        % WE CAN CHOOSE MODEL OF DRIFT
-        % 1. mark 1
-        drift(k) = drift(k - 1) + period_sec * normrnd(0, s_ksi);
-        % 1. mark 2
-        %     drift(i) = drift(i-1) + T * drift_t(i-1);
-        %     drift_t(i) = drift_t(i-1) + T * normrnd(0, s_ksi);
-        % 3. linear
-        %     drift(i) = drift(i-1) + T * shift_v;
-        % 4. const
-        %     drift(i) = shift_const;
-        % 5. WGN
-        %     drift(i) = normrnd(0, s_ksi);
-        
-        ToT(k) = ToT(k-1) + (1 - drift(k-1))*period_sec;
+        randnum = normrnd(0,s_ksi);
+        t_i(k) = t_i(k-1) + period_sec;
+        ToT(k) = ToT(k-1) + (t_i(k) - t_i(k-1))/(1 + delta(2,k-1));
+        dt = ToT(k) - ToT(k-1);
+        F = [1 dt; 0 1];
+        G = [0;dt];
+        delta(:,k) = F * delta(:,k-1) + G * randnum;
         current_t = ToT(k);
     end
     
@@ -77,7 +97,9 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
         'crd_valid', [],...
         'est_ToT', [],...
         'est_crd', [],...
-        'res', []);
+        'res', [],...
+        'ToT_i', [],...
+        'delta', []);
     poits(1:length(ToT)) = poit;
     while t_strob < t(end)
         nms = find(ToT < t_strob + strob_dur);
@@ -117,12 +139,16 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
             poit.est_ToT = 0;
             poit.est_crd = zeros(3,1);
             poit.res = [];
+            poit.ToT_i = t_i(nms(j));
+            poit.delta = delta(:,nms(j));
             k = k + 1;
             poits(k) = poit;% = [poits poit];
             
         end
         ToT(nms) = [];
         SV(:,nms) = [];
+        t_i(nms) = [];
+        delta(:,nms) = [];
         t_strob = t_strob + strob_dur;
     end     
         

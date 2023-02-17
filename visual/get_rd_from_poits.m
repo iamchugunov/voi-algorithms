@@ -21,7 +21,7 @@ function [RD] = get_rd_from_poits(poits)
     rd6 = 0;
     
     t0 = poits(1).Frame;
-    t0 = 0;
+%     t0 = 0;
     for i = 1:length(poits)
         if poits(i).ToA(4) > 0 && poits(i).ToA(1) > 0
             k1 = k1 + 1;
@@ -68,6 +68,7 @@ function [RD] = get_rd_from_poits(poits)
     xlabel('t, сек')
     ylabel('Разности дальностей, км')
     xlim([poits(1).Frame poits(end).Frame])
+    xlim([0 poits(end).Frame-poits(1).Frame])
     set(gca,'FontName','Times')
     set(gca,'FontSize',14)
     

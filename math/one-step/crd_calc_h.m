@@ -24,6 +24,8 @@ function [poit] = crd_calc_h(poit, config, X0)
         poit.crd_valid = 1;
         poit.est_crd = res.X(1:3);
         poit.est_ToT = res.X(4)/config.c + poit.Frame;
+    else
+        poit.crd_valid = 0;
     end
 end
 
