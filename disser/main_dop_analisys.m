@@ -174,11 +174,11 @@ for i = 1:length(X)
             k = k + 1;
             mesh_points(:,k) = point;
             R(k) = norm(point);
-            dop = get_dop_value(config, mesh_points(1,k), mesh_points(2,k), mesh_points(3,k), 'ToA2D');
+            dop = get_dop_value(config, mesh_points(1,k), mesh_points(2,k), mesh_points(3,k), 'ToF');
             xdop(j,i) = dop.XDOP;%/R(k);
             ydop(j,i) = dop.YDOP;%/R(k);
 %             zdop(j,i) = dop.ZDOP;
-            tdop(j,i) = dop.TDOP;%/R(k);
+%             tdop(j,i) = dop.TDOP;%/R(k);
             hdop(j,i) = dop.HDOP;%/R(k);
             pdop(j,i) = dop.PDOP;%/R(k);
         else
@@ -191,7 +191,8 @@ for i = 1:length(X)
         end
     end
 end
-show_dop(X,Y,hdop,[1 10 30 50 100 300 700 1000:1000:3000],[1 2000],config)
+% show_dop(X,Y,hdop,[1 10 30 50 100:100:1000],[1 1000],config) %% toa
+show_dop(X,Y,hdop,[1 3:1:19],[1 20],config) %% tof
 %% 1D among radius line
 alpha = (-90:30:90)*(pi)/180;
 figure(1)

@@ -1,19 +1,20 @@
-function [X, Dx, discr] = Kalman_step_3Dpd_T__(y, X_prev, Dx, dt, sigma_n, D_ksi, config)
-    % pd-kalman with knonw dT X = [x vx ax y vy ay z vz az tot]
+function [X, Dx, discr] = Kalman_step_3Dpd_T_corr(y, X_prev, Dx, T, sigma_n, D_ksi, config)
+    % pd-kalman with knonw dT X = [x vx ax y vy ay z vz az tot(m) drift(sec)]
     nums = find(y ~= 0);
     posts = config.posts(:,nums);
     y = y(nums);
     N = length(nums);
 
     D_n = eye(N) * sigma_n^2;
-
+    
+    dt = T/(1 + X_prev(11)/config.c);
+    
     F1 = [1 dt dt^2/2; 0 1 dt; 0 0 1];
     F = zeros(9,9);
     F(1:3,1:3) = F1;
     F(4:6,4:6) = F1;
     F(7:9,7:9) = F1;
     F(10,10) = 1;
-    F(10,11) = -dt;
     F(11,11) = 1;
     B = zeros(11,1);
     B(10) = config.c;
@@ -23,9 +24,32 @@ function [X, Dx, discr] = Kalman_step_3Dpd_T__(y, X_prev, Dx, dt, sigma_n, D_ksi
     G(6,2) = dt;
     G(9,3) = dt;
     G(11,4) = dt;
-
+    
+    qx = -X_prev(2)*T/(1 + X_prev(11)/config.c)^2/config.c - X_prev(3)*T^2/(1 + X_prev(11)/config.c)^3/config.c;
+    wx = -X_prev(3)*T/(1 + X_prev(11)/config.c)^2/config.c;
+    
+    qy = -X_prev(5)*T/(1 + X_prev(11)/config.c)^2/config.c - X_prev(6)*T^2/(1 + X_prev(11)/config.c)^3/config.c;
+    wy = -X_prev(6)*T/(1 + X_prev(11)/config.c)^2/config.c;
+    
+    qz = -X_prev(8)*T/(1 + X_prev(11)/config.c)^2/config.c - X_prev(9)*T^2/(1 + X_prev(11)/config.c)^3/config.c;
+    wz = -X_prev(9)*T/(1 + X_prev(11)/config.c)^2/config.c;
+    
+    qt = -T/(1 + X_prev(11)/config.c)^2;
+    
+    df = [1 dt dt^2/2 0 0 0 0 0 0 0 qx;
+        0 1 dt 0 0 0 0 0 0 0 wx;
+        0 0 1 0 0 0 0 0 0 0 0;
+        0 0 0 1 dt dt^2/2 0 0 0 0 qy;
+        0 0 0 0 1 dt 0 0 0 0 wy;
+        0 0 0 0 0 1 0 0 0 0 0;
+        0 0 0 0 0 0 1 dt dt^2/2 0 qz;
+        0 0 0 0 0 0 0 1 dt 0 wz;
+        0 0 0 0 0 0 0 0 1 0 0;
+        0 0 0 0 0 0 0 0 0 1 qt;
+        0 0 0 0 0 0 0 0 0 0 1];
+    
     X_ext = F * X_prev + B * dt;
-    D_x_ext = F * Dx * F' + G * D_ksi * G';
+    D_x_ext = df * Dx * df' + G * D_ksi * G';
     dS = make_dS(y, X_ext, posts);
     S = make_S(y, X_ext, posts);
     K = D_x_ext * dS' * inv(dS*D_x_ext*dS' + D_n);

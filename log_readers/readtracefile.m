@@ -41,6 +41,7 @@ warning off
     poit.est_crd = 0;
     poit.est_ToT = 0;
     poit.res = [];
+    poit.hgeo = [];
 %     
     fgetl(f);
 %     
@@ -108,6 +109,7 @@ while feof(f)==0
             poit.est_crd = 0;
             poit.est_ToT = 0;
             poit.res = [];
+            poit.hgeo = [];
             
             k_poits = k_poits + 1;
             

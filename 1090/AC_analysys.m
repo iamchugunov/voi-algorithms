@@ -1,6 +1,6 @@
-function [codes] = AC_analysys(traj)
+function [codes] = AC_analysys(poits)
     
-    poits = traj.poits;
+%     poits = traj.poits;
     Tnak = 5;
     T = 5;
     k = 0;
