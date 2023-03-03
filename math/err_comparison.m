@@ -60,6 +60,7 @@ hold on
   legend(legends)
   xlabel('t, сек')
   ylabel('v_z, м/с')
-  set(gcf, 'Position', get(0, 'Screensize'));
+  
+%   set(gcf, 'Position', get(0, 'Screensize'));
 end
 
