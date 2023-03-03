@@ -31,10 +31,13 @@ function [codes] = get_codes_from_poits(poits)
         RD = [];
         for j = 1:6
             nms = find(rd(j,:) ~= 0);
-            if isempty(nms)
-                RD(j,:) = [0 0];
+            if length(nms) < 5
+                RD(j,:) = [0 0 0 0];
             else
-                RD(j,:) = [mean(rd(j,nms)) std(rd(j,nms))];
+                rd_ = rd(j,nms);
+                t = [codes(i).poits(nms).Frame];
+                [koef, sko, X] = mnk_approx_step(t - t(1), rd_, 1);
+                RD(j,:) = [koef(1) koef(2) sko t(1)];
             end
         end
         codes(i).RD = RD;
