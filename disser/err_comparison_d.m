@@ -42,7 +42,7 @@ function [] = err_comparison_d(res,legends)
   end
   legend(legends{1:end-1})
   xlabel('t, сек')
-  ylabel('Погрешность, м')
+  ylabel(' ')
   set(gca,'FontSize',18)
     set(gca,'FontName','Times')
   

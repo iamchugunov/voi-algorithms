@@ -45,5 +45,6 @@ function [track] = read_gpx_file()
     track.vel = [vx;vy;vz];
     track.acc = track.vel;
     track.kurs = kurs;
+    track.pos = pos;
 end
 

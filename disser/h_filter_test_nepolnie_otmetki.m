@@ -29,6 +29,7 @@ track = make_geo_track_new(traj_params, config);
 show_posts3D
 show_track3D(track)
 %%
+close all
 config.sigma_n_ns = 10;
 measurements_params.sigma_n_ns = config.sigma_n_ns;
 measurements_params.period_sec = 1;
@@ -38,10 +39,16 @@ measurements_params.s_ksi = 1e-8*0;
 track = make_measurements_for_track(track, measurements_params, config);
 get_rd_from_poits(track.poits)
 %%
+close all
 params.mode = 1;
 params.percentage = [0.4 0.4 0.2];
-params.banned_post = 2;
+params.banned_post = 4;
 [track.poits(150:300), res] = thinning_measurements(track.poits(150:300), params, config);
+[track.poits(450:600), res] = thinning_measurements(track.poits(450:600), params, config);
+[track.poits(850:1000), res] = thinning_measurements(track.poits(850:1000), params, config);
+[track.poits(1200:1350), res] = thinning_measurements(track.poits(1200:1350), params, config);
+[track.poits(1600:1800), res] = thinning_measurements(track.poits(1600:1800), params, config);
+% [track.poits, res] = thinning_measurements(track.poits, params, config);
 % params.mode = 1;
 % params.percentage = [0.4 0.4 0.2];
 % params.banned_post = 1;
@@ -97,55 +104,58 @@ sigma_ksi = 0.1;
  
   [KFilter1] = RDKalmanFilter3D(track, config, X0, Dx1, sigma_ksi);
   
-%   for i = 1:length(track.poits)
-%       track.poits(i).h_geo = traj_params.h + normrnd(0,1000);
-%   end
+  for i = 1:length(track.poits)
+      track.poits(i).h_geo = traj_params.h + normrnd(0,1000);
+  end
   [KFilter2] = RDKalmanFilter3D_hgeo_inpoits(track, config, X0, Dx2, sigma_ksi,1000);
   
-%   for i = 1:length(track.poits)
-%       track.poits(i).h_geo = traj_params.h + normrnd(0,500);
-%   end
+  for i = 1:length(track.poits)
+      track.poits(i).h_geo = traj_params.h + normrnd(0,500);
+  end
   [KFilter3] = RDKalmanFilter3D_hgeo_inpoits(track, config, X0, Dx3, sigma_ksi,500);
   
-%   for i = 1:length(track.poits)
-%       track.poits(i).h_geo = traj_params.h + normrnd(0,100);
-%   end
+  for i = 1:length(track.poits)
+      track.poits(i).h_geo = traj_params.h + normrnd(0,100);
+  end
   [KFilter4] = RDKalmanFilter3D_hgeo_inpoits(track, config, X0, Dx4, sigma_ksi,100);
-  
-%   for i = 1:length(track.poits)
-%       track.poits(i).h_geo = traj_params.h + normrnd(0,50);
-%   end
+
+  for i = 1:length(track.poits)
+      track.poits(i).h_geo = traj_params.h + normrnd(0,50);
+  end
   [KFilter5] = RDKalmanFilter3D_hgeo_inpoits(track, config, X0, Dx5, sigma_ksi,50);
   
-%   for i = 1:length(track.poits)
-%       track.poits(i).h_geo = traj_params.h + normrnd(0,10);
-%   end
+  for i = 1:length(track.poits)
+      track.poits(i).h_geo = traj_params.h + normrnd(0,10);
+  end
   [KFilter6] = RDKalmanFilter3D_hgeo_inpoits(track, config, X0, Dx6, sigma_ksi,10);
   
-%   for i = 1:length(track.poits)
-%       track.poits(i).h_geo = traj_params.h + normrnd(0,1);
-%   end
+  for i = 1:length(track.poits)
+      track.poits(i).h_geo = traj_params.h + normrnd(0,1);
+  end
   [KFilter7] = RDKalmanFilter3D_hgeo_inpoits(track, config, X0, Dx7, sigma_ksi,1);
 
 
 
 show_posts2D
-show_primary_points2D(poits)
-show_track2D(track)
+% show_primary_points2D(poits)
+
 plot(KFilter1.crd(1,:)/1000,KFilter1.crd(2,:)/1000,'.-')
 plot(KFilter2.crd(1,:)/1000,KFilter2.crd(2,:)/1000,'.-')
-plot(KFilter3.crd(1,:)/1000,KFilter3.crd(2,:)/1000,'.-')
 plot(KFilter4.crd(1,:)/1000,KFilter4.crd(2,:)/1000,'.-')
-plot(KFilter5.crd(1,:)/1000,KFilter5.crd(2,:)/1000,'.-')
 plot(KFilter6.crd(1,:)/1000,KFilter6.crd(2,:)/1000,'.-')
-plot(KFilter7.crd(1,:)/1000,KFilter7.crd(2,:)/1000,'.-')
+show_track2D(track)
+xlabel('x, ךל')
+ylabel('y, ךל')
+set(gca,'FontSize',18)
+set(gca,'FontName','Times')
+legend('ÏÏ', 'ÐÄÔ', 's = 1000 ל', 's = 100 ל', 's = 10 ל')
 
-  [err] = err_calc_dist(track, KFilter1,config);
-  [err] = err_calc_dist(track, KFilter2,config);
-  [err] = err_calc_dist(track, KFilter3,config);
-  [err] = err_calc_dist(track, KFilter4,config);
-  [err] = err_calc_dist(track, KFilter5,config);
-   [err] = err_calc_dist(track, KFilter6,config);
-    [err] = err_calc_dist(track, KFilter7,config);
-  [err] = err_calc_poits(track, poits,config);
+%   [err] = err_calc_dist(track, KFilter1,config);
+%   [err] = err_calc_dist(track, KFilter2,config);
+%   [err] = err_calc_dist(track, KFilter3,config);
+%   [err] = err_calc_dist(track, KFilter4,config);
+%   [err] = err_calc_dist(track, KFilter5,config);
+%    [err] = err_calc_dist(track, KFilter6,config);
+%     [err] = err_calc_dist(track, KFilter7,config);
+%   [err] = err_calc_poits(track, poits,config);
   err_comparison_d([KFilter1 KFilter2 KFilter3 KFilter4 KFilter5 KFilter6 KFilter7],{'s = 1000 ל', 's = 500 ל', 's = 100 ל', 's = 50 ל', 's = 10 ל', 's = 1 ל', 'ÐÄÔ'})
