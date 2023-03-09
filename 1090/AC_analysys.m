@@ -1,4 +1,4 @@
-function [new_pairs] = AC_analysys(poits)
+function [pairs] = AC_analysys(poits)
     
     
     Tnak = 10;
@@ -80,7 +80,7 @@ function [new_pairs] = AC_analysys(poits)
                         pairs_count = pairs_count + 1;
                         pairs(pairs_count) = pair_code;
                         fprintf('\n')
-                        fprintf('%3d %4X\t%4X\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\n', pairs_count, pairs(pairs_count).first_code, pairs(pairs_count).second_code, pairs(pairs_count).RD(1,1),pairs(pairs_count).RD(1,3),pairs(pairs_count).RD(2,1),pairs(pairs_count).RD(2,3),pairs(pairs_count).RD(3,1),pairs(pairs_count).RD(3,3),pairs(pairs_count).RD(4,1),pairs(pairs_count).RD(4,3))
+                        fprintf('%3d %4X\t%4X\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\n', pairs_count, pairs(pairs_count).first_code, pairs(pairs_count).second_code, pairs(pairs_count).RD(1,1),pairs(pairs_count).RD(1,3),pairs(pairs_count).RD(2,1),pairs(pairs_count).RD(2,3),pairs(pairs_count).RD(3,1),pairs(pairs_count).RD(3,3),pairs(pairs_count).RD(4,1),pairs(pairs_count).RD(4,3),pairs(pairs_count).RD(5,1),pairs(pairs_count).RD(5,3),pairs(pairs_count).RD(6,1),pairs(pairs_count).RD(6,3))
                         codes_squawk(k) = [];
                         codes_hei(i) = [];
                         k = k - 1;
@@ -101,9 +101,10 @@ function [new_pairs] = AC_analysys(poits)
     end
     
     fprintf('\n')
-    for pairs_count = 1:length(new_pairs)
+    for pairs_count = 1:length(pairs)
         fprintf('%3d %4X\t%4X\t%7.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\t%7.0f\t%4.0f\n', pairs_count, pairs(pairs_count).first_code, pairs(pairs_count).second_code, decodeACcode(dec2hex(pairs(pairs_count).second_code,4)), pairs(pairs_count).RD(1,1),pairs(pairs_count).RD(1,3),pairs(pairs_count).RD(2,1),pairs(pairs_count).RD(2,3),pairs(pairs_count).RD(3,1),pairs(pairs_count).RD(3,3),pairs(pairs_count).RD(4,1),pairs(pairs_count).RD(4,3),pairs(pairs_count).RD(5,1),pairs(pairs_count).RD(5,3),pairs(pairs_count).RD(6,1),pairs(pairs_count).RD(6,3))
-    end                      
+    end 
+    [new_pairs] = pairs_unity(pairs);
     
 end
 
