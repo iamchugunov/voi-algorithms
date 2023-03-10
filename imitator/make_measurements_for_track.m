@@ -48,7 +48,7 @@ function [track] = make_measurements_for_track(track, measurements_params, confi
     while current_t < t(end)
         k = k + 1;
         randnum = normrnd(0,s_ksi);
-        t_i(k) = t_i(k-1) + period_sec;
+        t_i(k) = t_i(k-1) + period_sec * ( 1 + randi([0 n_periods]) );
         ToT(k) = ToT(k-1) + (t_i(k) - t_i(k-1))/(1 + delta(2,k-1));
         dt = ToT(k) - ToT(k-1);
         F = [1 dt; 0 1];
